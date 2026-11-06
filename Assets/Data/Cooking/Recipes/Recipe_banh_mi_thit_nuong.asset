@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dfd20824a82b0e4c8a975a432a2b7ec, type: 3}
+  m_Name: Recipe_banh_mi_thit_nuong
+  m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Data.RecipeSO
+  id: banh_mi_thit_nuong
+  recipeName: "B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng"
+  region: "Vi\u1EC7t Nam"
+  basePrice: 110
+  finishedDishSprite: {fileID: 21300000, guid: 405bbe10f4a20344c85111065a2418bd, type: 3}
+  requirements:
+  - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}
+    requiredAmount: 1
+  - ingredient: {fileID: 11400000, guid: e73b72c1e2ec29f4eaa9c889f1994ab3, type: 2}
+    requiredAmount: 3
+  - ingredient: {fileID: 11400000, guid: 4ff7ad0427aa19c459860011db255bee, type: 2}
+    requiredAmount: 2
+  - ingredient: {fileID: 11400000, guid: 6f477844716338f47bf08e43e3681492, type: 2}
+    requiredAmount: 1
