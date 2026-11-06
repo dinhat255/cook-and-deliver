@@ -44,6 +44,7 @@
     - `Oven`: `IconBox` nằm gọn trong khoang kính trên vỉ sắt (Y: 0.44 - 0.78), thanh tiến trình nằm ở gờ dưới cửa lò.
     - `Pan`: `IconBox` nằm giữa lòng chảo sốt (X: 0.24 - 0.76, Y: 0.44 - 0.78), thanh tiến trình đặt trên thân bếp gas.
   - Phân bổ KDS và hàng chờ: `Ticket0` (0.02 - 0.44), `Ticket1` (0.46 - 0.88), `QueueBadgeButton` (0.90 - 0.98) đảm bảo lọt lòng chuẩn tỷ lệ và không đè lấn nhau.
+  - Nước lèo (Broth Station UX): Sử dụng sprite `pot.png` (chiếc nồi inox) làm icon cho `Ingredient_broth` để tương đồng 1-1 với Nồi Nước Lèo trên bếp. Nồi tự động nhịp to nhỏ (pulse hint) khi thớt đã có bánh phở và đang chờ nước lèo. Toast phân biệt rõ: "Cần bánh phở trước" khi thiếu phở và "Không cần nước lèo" khi đơn không yêu cầu.
 - Menu Editor: `Cooking > Build or rebuild Cooking scene (Clean Architecture)` thực hiện một cú click để sinh dữ liệu và nối dây trong scene.
 - Chín/cháy bằng code: đổi màu sprite + thanh tiến trình + khói UI. Vỉ 3s/6s/8s, lò ép 2s (không cháy), chảo 2.5s/4.5s/6s.
 - Smart-tap: chạm 1 lần, sprite bay cung parabol 0.18s. Thớt Active ưu tiên, nếu không nhận thì thử thớt còn lại.
