@@ -42,6 +42,7 @@ namespace CookAndDeliver.Cooking.Presenters
         public EconomyEventChannelSO economyEventChannel;
 
         bool isGameFrozen;
+        bool isPotHinting;
 
         void Awake()
         {
@@ -146,6 +147,7 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 workstationPresenter.AssignOrdersToBoards(orderPresenter.ActiveOrders);
                 UpdateMutualHighlights();
+                UpdatePotHint();
             }
         }
 
@@ -508,6 +510,7 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 potRect.DOKill();
                 potRect.localScale = Vector3.one;
+                isPotHinting = false;
                 potRect.DOPunchScale(Vector3.one * 0.08f, 0.2f, 5, 0.5f);
             }
 
@@ -517,7 +520,24 @@ namespace CookAndDeliver.Cooking.Presenters
             var targetBoard = workstationPresenter.GetTargetBoard(broth);
             if (targetBoard == null)
             {
-                ShowToast("Cần bánh phở trước", potRect != null ? potRect.position : transform.position, new Color(1f, 0.5f, 0.4f));
+                bool orderNeedsBroth = false;
+                if (workstationPresenter.boards != null)
+                {
+                    foreach (var b in workstationPresenter.boards)
+                    {
+                        if (b != null && b.CurrentOrder != null && b.CurrentOrder.Recipe != null)
+                        {
+                            if (b.CurrentOrder.Recipe.GetRequiredAmount(broth) > 0)
+                            {
+                                orderNeedsBroth = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                string toastMsg = orderNeedsBroth ? "Cần bánh phở trước" : "Không cần nước lèo";
+                ShowToast(toastMsg, potRect != null ? potRect.position : transform.position, new Color(1f, 0.5f, 0.4f));
                 return;
             }
 
@@ -546,6 +566,7 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 workstationPresenter.HandleTicketSelected(order);
                 UpdateMutualHighlights();
+                UpdatePotHint();
             }
         }
 
@@ -565,6 +586,27 @@ namespace CookAndDeliver.Cooking.Presenters
                         tv.SetAssignedToWorkstation(isMatch);
                     }
                 }
+            }
+        }
+
+        void UpdatePotHint()
+        {
+            if (potRect == null || workstationPresenter == null || recipeDatabase == null) return;
+            var broth = recipeDatabase.FindIngredientById("broth");
+            if (broth == null) return;
+
+            bool canReceiveBroth = workstationPresenter.GetTargetBoard(broth) != null;
+            if (canReceiveBroth && !isPotHinting)
+            {
+                isPotHinting = true;
+                potRect.DOKill();
+                potRect.DOScale(1.08f, 0.45f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
+            }
+            else if (!canReceiveBroth && isPotHinting)
+            {
+                isPotHinting = false;
+                potRect.DOKill();
+                potRect.localScale = Vector3.one;
             }
         }
 
