@@ -82,7 +82,14 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 if (ticketViews[i] != null)
                 {
-                    defaultTicketPositions[i] = ((RectTransform)ticketViews[i].transform).anchoredPosition;
+                    Vector2 pos = ((RectTransform)ticketViews[i].transform).anchoredPosition;
+                    // Safety guard: If scene was saved while ticket was animating off-screen (|x| > 100), clamp to Vector2.zero
+                    if (Mathf.Abs(pos.x) > 100f)
+                    {
+                        pos = Vector2.zero;
+                        ((RectTransform)ticketViews[i].transform).anchoredPosition = Vector2.zero;
+                    }
+                    defaultTicketPositions[i] = pos;
                 }
             }
         }

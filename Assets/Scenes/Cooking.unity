@@ -4778,6 +4778,10 @@ PrefabInstance:
       propertyPath: m_fontColor.a
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 45210115013067370, guid: 45c2734be32608f4b8f27ba59ffe8948, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 2164260863
+      objectReference: {fileID: 0}
     - target: {fileID: 80880798186675940, guid: 45c2734be32608f4b8f27ba59ffe8948, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -12114,7 +12118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3635852400994957512, guid: 8a02a816e0cba3a4ca16fa0951661fee, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -260
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3635852400994957512, guid: 8a02a816e0cba3a4ca16fa0951661fee, type: 3}
       propertyPath: m_AnchoredPosition.y
