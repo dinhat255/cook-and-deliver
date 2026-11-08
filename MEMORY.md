@@ -26,6 +26,13 @@
   5. UI / View Layer (`CookAndDeliver.Cooking.UI`): 100% TextMeshProUGUI. Gồm `HudView`, `TicketView`, `TicketSlotView`, `BoardView`, `ChecklistSlotView`, `HeatSlotView`, `TrayButtonView`, `ShipOverlayView`, `OrderQueuePopupView`, `TMPKit`.
   6. Presenters Layer (`CookAndDeliver.Cooking.Presenters`): MVP pattern gồm `HudPresenter`, `OrderPresenter`, `HeatStationPresenter`, `WorkstationPresenter`, `CookingMasterPresenter`.
   7. Editor Layer (`CookAndDeliver.Cooking.Editor`): `CookingAssetDatabaseBuilder`, `CookingSceneBuilder`, `CookingSpriteImporter`.
+  8. SaveLoad Layer (`CookAndDeliver.SaveLoad.Core`, `CookAndDeliver.SaveLoad.Objects`):
+     - `ISaveLoadHandler`, `JsonSaveLoadHandler`, `SaveLoadManager`, `SaveTree`, `EncryptUtil` (AES-256).
+     - Đường dẫn lưu: `Application.persistentDataPath/SaveData/savedata.json`.
+     - Generic `LoadAsync<T>` type-safe, I/O bất đồng bộ hoàn toàn qua `UniTask`.
+     - Hỗ trợ mã hóa AES linh hoạt qua cờ `UseEncryption`.
+     - `GameProgressSLO` lưu trữ tiến trình mở khóa công thức, coin, combo, liên kết đồng bộ với `RecipeProgressionService`.
+     - `GeneralSettingsSLO` lưu cấu hình người chơi, âm lượng BGM/SFX, Mute.
 - Hệ thống KDS 2 làn độc lập song song (Dedicated Dual-Lane KDS):
   - Khóa chặt liên kết song song 1-1: `Ticket0` (Trái) gắn chặt với `Board0` (Thớt Trái); `Ticket1` (Phải) gắn chặt với `Board1` (Thớt Phải). Nhìn từ trên xuống luôn thẳng hàng 1-1, không chéo cánh X.
   - Màu sắc vé: Trắng ngà (`#F7F5E6` chữ đậm `#262626`) cho Tại bàn, Cam đậm (`#FFA847` chữ nâu đen `#1F1405`) cho Giao ship.
@@ -51,7 +58,7 @@
 - Chọn phương án thân thiện: nguyên liệu sai bị bật lại, không hỏng món, không phạt. Chỉ phạt khi để cháy (-15 xu, mất combo) hoặc dọn thớt (-5 xu).
 - Đủ 3 hộp ship: Deep Freeze bếp, hiện overlay (Giao hàng -> scene Delivery, hoặc tiếp tục để test).
 - Hệ thống mở khóa công thức và Sổ tay ẩm thực (Recipe Progression & Culinary Codex):
-  - `IRecipeProgressionService` & `RecipeProgressionService`: Quản lý mở khóa món ăn lưu bền vững qua `PlayerPrefs` (`RECIPE_UNLOCKED_{id}`).
+  - `IRecipeProgressionService` & `RecipeProgressionService`: Quản lý mở khóa món ăn lưu bền vững kết hợp đa tầng: đọc/ghi bất đồng bộ qua `SaveLoadManager` (`GameProgressSLO`) và đồng bộ `PlayerPrefs` (`RECIPE_UNLOCKED_{id}`) để bảo toàn tương thích ngược.
   - `RecipeSO` mở rộng: Lưu trữ mô tả (`dishDescription`), nguồn gốc lịch sử văn hóa (`culturalStory`), đặc trưng vị giác (`flavorProfile`), mẹo đầu bếp (`chefTip`), trạng thái mở khóa mặc định (`isUnlockedByDefault`) và học phí mở khóa (`unlockCostCoins`).
   - `OrderPresenter.SpawnOrder`: Rút ngẫu nhiên đơn hàng từ tập các món đã học (`RecipeDatabaseSO.GetRandomUnlockedRecipe`).
   - `CulinaryCodexPopupView`: Sổ tay ẩm thực và học viện nấu ăn, hiển thị chi tiết văn hóa ẩm thực Việt - Hàn - Fusion và cho phép trả phí học mở khóa công thức.
