@@ -16,6 +16,12 @@ MonoBehaviour:
   recipeName: "K-B\xE1nh M\xEC Bulgogi"
   region: Fusion
   basePrice: 140
+  dishDescription: "V\u1ECF b\xE1nh m\xEC gi\xF2n tan k\u1EB9p th\u1ECBt b\xF2 Bulgogi n\u01B0\u1EDBng x\u1ED1t t\u01B0\u01A1ng m\xE8 v\xE0 kim chi cay gi\xF2n."
+  culturalStory: "S\u1EF1 giao thoa tuy\u1EC7t v\u1EDDi gi\u1EEFa b\xE1nh m\xEC S\xE0i G\xF2n v\xE0 th\u1ECBt n\u01B0\u1EDBng Bulgogi Seoul, t\u1EA1o n\xEAn c\u01A1n s\u1ED1t \u1EA9m th\u1EF1c fusion \u0111\u01B0\u1EE3c th\u1EF1c kh\xE1ch tr\u1EBB v\xF4 c\xF9ng y\xEAu chu\u1ED9ng."
+  flavorProfile: "V\u1ECF gi\xF2n tan, th\u1ECBt b\xF2 ng\u1ECDt \u0111\u1EADm x\u1ED1t l\xEA t\u01B0\u01A1ng m\xE8, kim chi chua cay thanh gi\u1EA3m ng\u1EA5y"
+  chefTip: "Th\u1ECBt b\xF2 n\u01B0\u1EDBng ch\xEDn t\u1EDBi tr\xEAn v\u1EC9 than ph\u1EA3i g\u1EAFp ngay v\xE0o b\xE1nh \u0111\u1EC3 ph\u1EA7n m\u1EE1 th\u1ECBt ng\u1EA5m v\xE0o ru\u1ED9t b\xE1nh"
+  isUnlockedByDefault: 0
+  unlockCostCoins: 250
   finishedDishSprite: {fileID: 21300000, guid: caa2d4c1ead3b34489542b3240f34efc, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}

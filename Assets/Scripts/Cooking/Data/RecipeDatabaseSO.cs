@@ -17,6 +17,21 @@ namespace CookAndDeliver.Cooking.Data
             return recipes[idx];
         }
 
+        public RecipeSO GetRandomUnlockedRecipe(CookAndDeliver.Cooking.Core.Services.IRecipeProgressionService progressionService)
+        {
+            if (recipes == null || recipes.Count == 0) return null;
+            if (progressionService != null)
+            {
+                var available = progressionService.GetUnlockedRecipes(recipes);
+                if (available != null && available.Count > 0)
+                {
+                    int idx = Random.Range(0, available.Count);
+                    return available[idx];
+                }
+            }
+            return GetRandomRecipe();
+        }
+
         public RecipeSO FindRecipeById(string id)
         {
             return recipes.Find(r => r != null && r.id == id);

@@ -16,6 +16,12 @@ MonoBehaviour:
   recipeName: "Ph\u1EDF Kim Chi Bulgogi"
   region: Fusion
   basePrice: 130
+  dishDescription: "Ph\u1EDF b\xF2 t\xE1i k\u1EBFt h\u1EE3p kim chi mu\u1ED1i chua cay, t\u1EA1o n\xEAn h\u01B0\u01A1ng v\u1ECB n\u01B0\u1EDBc d\xF9ng \u0111\u1EB7c bi\u1EC7t \u1EA5m n\u1ED3ng."
+  culturalStory: "S\u1EF1 k\u1EBFt h\u1EE3p \u0111\u1ED9t ph\xE1 gi\u1EEFa n\u01B0\u1EDBc h\u1EA7m x\u01B0\u01A1ng ph\u1EDF H\xE0 N\u1ED9i v\xE0 kim chi truy\u1EC1n th\u1ED1ng H\xE0n Qu\u1ED1c, t\u1EA1o n\xEAn m\xF3n canh ph\u1EDF cay n\u1ED3ng \u0111\u1EADm \u0111\xE0 gi\u1EA3i c\u1EA3m."
+  flavorProfile: "Chua cay thanh nh\u1EB9, b\xE9o ng\u1EADy t\u1EE7y b\xF2, th\u01A1m l\u1EEBng th\u1EA3o m\u1ED9c Vi\u1EC7t - H\xE0n"
+  chefTip: "Cho kim chi v\xE0o t\xF4 tr\u01B0\u1EDBc khi chan n\u01B0\u1EDBc d\xF9ng s\xF4i \u0111\u1EC3 n\u01B0\u1EDBc ph\u1EDF h\xF2a quy\u1EC7n men chua thanh c\u1EE7a kim chi"
+  isUnlockedByDefault: 0
+  unlockCostCoins: 300
   finishedDishSprite: {fileID: 21300000, guid: f2d50a2604927584a8d7f0378811b32b, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}

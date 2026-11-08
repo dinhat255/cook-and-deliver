@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CookAndDeliver.Cooking.Core;
 using CookAndDeliver.Cooking.Core.Events;
+using CookAndDeliver.Cooking.Core.Services;
 using CookAndDeliver.Cooking.Data;
 using CookAndDeliver.Cooking.UI;
 using DG.Tweening;
@@ -168,7 +169,8 @@ namespace CookAndDeliver.Cooking.Presenters
         public void SpawnOrder(bool isShip)
         {
             if (recipeDatabase == null) return;
-            var recipe = recipeDatabase.GetRandomRecipe();
+            var progression = CookingServiceLocator.Get<IRecipeProgressionService>();
+            var recipe = recipeDatabase.GetRandomUnlockedRecipe(progression);
             if (recipe == null) return;
 
             float patience = config != null ? config.orderPatienceDuration : 60f;

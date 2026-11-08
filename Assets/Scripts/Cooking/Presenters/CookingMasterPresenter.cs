@@ -31,6 +31,7 @@ namespace CookAndDeliver.Cooking.Presenters
         public Button potButton;
         public RectTransform potRect;
         public ShipOverlayView shipOverlay;
+        public CulinaryCodexPopupView codexPopup;
 
         [Header("VFX & UI Pool Layer")]
         public RectTransform flyLayer;
@@ -251,6 +252,26 @@ namespace CookAndDeliver.Cooking.Presenters
                     }
                 }
             }
+
+            if (codexPopup != null)
+            {
+                codexPopup.OnOpenStateChanged += HandleCodexStateChanged;
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (codexPopup != null)
+            {
+                codexPopup.OnOpenStateChanged -= HandleCodexStateChanged;
+            }
+        }
+
+        void HandleCodexStateChanged(bool isOpen)
+        {
+            if (orderPresenter != null) orderPresenter.SetPaused(isOpen);
+            if (heatStationPresenter != null) heatStationPresenter.SetPaused(isOpen);
+            if (workstationPresenter != null) workstationPresenter.SetPaused(isOpen);
         }
 
         // ------------------------------------------------------------- Event Handlers

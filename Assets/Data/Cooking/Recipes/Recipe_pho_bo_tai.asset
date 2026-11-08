@@ -16,6 +16,12 @@ MonoBehaviour:
   recipeName: "Ph\u1EDF B\xF2 T\xE1i"
   region: "Vi\u1EC7t Nam"
   basePrice: 120
+  dishDescription: "M\xF3n \u0103n qu\u1ED1c h\u1ED3n qu\u1ED1c t\xFAy c\u1EE7a Vi\u1EC7t Nam v\u1EDBi b\xE1nh ph\u1EDF m\u1EC1m m\u01B0\u1EDBt, th\u1ECBt b\xF2 t\xE1i m\u1EC1m ng\u1ECDt v\xE0 n\u01B0\u1EDBc d\xF9ng thanh trong ninh t\u1EEB x\u01B0\u01A1ng t\u1EE7y."
+  culturalStory: "Ra \u0111\u1EDDi t\u1EA1i mi\u1EC1n B\u1EAFc Vi\u1EC7t Nam \u0111\u1EA7u th\u1EBF k\u1EF7 20, Ph\u1EDF l\xE0 s\u1EF1 giao thoa k\u1EF3 di\u1EC7u gi\u1EEFa k\u1EF9 ngh\u1EC7 h\u1EA7m x\u01B0\u01A1ng ph\u01B0\u01A1ng T\xE2y v\xE0 s\u1EE3i b\xE1nh g\u1EA1o truy\u1EC1n th\u1ED1ng \xC1 \u0110\xF4ng. N\u01B0\u1EDBc d\xF9ng ninh h\u01A1n 10 ti\u1EBFng c\xF9ng qu\u1EBF h\u1ED3i th\u1EA3o qu\u1EA3 t\u1EA1o n\xEAn h\u01B0\u01A1ng v\u1ECB say \u0111\u1EAFm l\xF2ng ng\u01B0\u1EDDi."
+  flavorProfile: "Thanh ng\u1ECDt t\u1EF1 nhi\xEAn t\u1EEB x\u01B0\u01A1ng b\xF2, n\u1ED3ng n\xE0n h\u1ED3i qu\u1EBF, h\xE0nh l\xE1 cay nh\u1EB9"
+  chefTip: "Th\u1ECBt b\xF2 ch\u1EC9 n\u01B0\u1EDBng v\u1EEBa t\u1EDBi gi\u1EEF \u0111\u1ED9 m\u1ECDng n\u01B0\u1EDBc, chan n\u01B0\u1EDBc l\xE8o n\xF3ng h\u1ED5i l\xE0m th\u1ECBt ch\xEDn t\xE1i"
+  isUnlockedByDefault: 1
+  unlockCostCoins: 0
   finishedDishSprite: {fileID: 21300000, guid: 3f336ca83237933459e46d6f50833f07, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}

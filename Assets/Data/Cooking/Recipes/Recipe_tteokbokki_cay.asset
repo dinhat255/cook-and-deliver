@@ -16,6 +16,12 @@ MonoBehaviour:
   recipeName: Tteokbokki Cay
   region: "H\xE0n Qu\u1ED1c"
   basePrice: 100
+  dishDescription: "B\xE1nh g\u1EA1o d\u1EBBo m\u1EC1m x\xE0o \u0111\u1EABm x\u1ED1t cay n\u1ED3ng, k\u1EBFt h\u1EE3p kim chi chua cay v\xE0 h\xE0nh l\xE1 th\u01A1m n\u1EE9c."
+  culturalStory: "Kh\u1EDFi ngu\u1ED3n t\u1EEB m\xF3n \u0103n ho\xE0ng gia Joseon, Tteokbokki ng\xE0y nay v\u1EDBi x\u1ED1t \u1EDBt Gochujang \u0111\xE3 tr\u1EDF th\xE0nh m\xF3n \u0103n v\u1EB7t qu\u1ED1c d\xE2n kh\xF4ng th\u1EC3 thi\u1EBFu tr\xEAn kh\u1EAFp c\xE1c con ph\u1ED1 Seoul s\u1EA7m u\u1EA5t."
+  flavorProfile: "Cay ng\u1ECDt s\xE1nh m\u1ECBn, b\xE1nh g\u1EA1o d\u1EBBo dai, kim chi chua d\u1ECBu c\xE2n b\u1EB1ng"
+  chefTip: "\u0110\u1EA3o b\xE1nh g\u1EA1o \u0111\u1EC1u tay trong ch\u1EA3o x\u1ED1t s\xF4i \u0111\u1EC3 gia v\u1ECB ng\u1EA5m s\xE2u v\xE0o l\xF5i b\xE1nh"
+  isUnlockedByDefault: 1
+  unlockCostCoins: 0
   finishedDishSprite: {fileID: 21300000, guid: 0c454c225190b944cbbfaf1f980026c3, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 6f685ce031a5c3b47be6ea4def502f45, type: 2}

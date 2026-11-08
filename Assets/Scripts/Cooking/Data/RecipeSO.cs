@@ -13,6 +13,18 @@ namespace CookAndDeliver.Cooking.Data
         public string region; // VN, KR, Fusion
         public int basePrice = 100;
 
+        [Header("Cultural Lore & Storytelling")]
+        [TextArea(2, 4)]
+        public string dishDescription;
+        [TextArea(3, 6)]
+        public string culturalStory;
+        public string flavorProfile;
+        public string chefTip;
+
+        [Header("Progression & Mastery")]
+        public bool isUnlockedByDefault = false;
+        public int unlockCostCoins = 200;
+
         [Header("Finished Visual")]
         public Sprite finishedDishSprite;
 

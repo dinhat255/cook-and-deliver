@@ -50,6 +50,12 @@
 - Smart-tap: chạm 1 lần, sprite bay cung parabol 0.18s. Thớt Active ưu tiên, nếu không nhận thì thử thớt còn lại.
 - Chọn phương án thân thiện: nguyên liệu sai bị bật lại, không hỏng món, không phạt. Chỉ phạt khi để cháy (-15 xu, mất combo) hoặc dọn thớt (-5 xu).
 - Đủ 3 hộp ship: Deep Freeze bếp, hiện overlay (Giao hàng -> scene Delivery, hoặc tiếp tục để test).
+- Hệ thống mở khóa công thức và Sổ tay ẩm thực (Recipe Progression & Culinary Codex):
+  - `IRecipeProgressionService` & `RecipeProgressionService`: Quản lý mở khóa món ăn lưu bền vững qua `PlayerPrefs` (`RECIPE_UNLOCKED_{id}`).
+  - `RecipeSO` mở rộng: Lưu trữ mô tả (`dishDescription`), nguồn gốc lịch sử văn hóa (`culturalStory`), đặc trưng vị giác (`flavorProfile`), mẹo đầu bếp (`chefTip`), trạng thái mở khóa mặc định (`isUnlockedByDefault`) và học phí mở khóa (`unlockCostCoins`).
+  - `OrderPresenter.SpawnOrder`: Rút ngẫu nhiên đơn hàng từ tập các món đã học (`RecipeDatabaseSO.GetRandomUnlockedRecipe`).
+  - `CulinaryCodexPopupView`: Sổ tay ẩm thực và học viện nấu ăn, hiển thị chi tiết văn hóa ẩm thực Việt - Hàn - Fusion và cho phép trả phí học mở khóa công thức.
+  - Danh mục mở rộng lên 8 món: Phở Bò Tái, Bánh Mì Thịt Nướng, Tteokbokki Cay (mở mặc định); K-Bánh Mì Bulgogi, Phở Kim Chi Bulgogi, Tteokbokki Cung Đình, Bánh Mì Thập Cẩm Giao Hòa, Mì Xào Kim Chi Thịt Heo (mở qua học nấu ăn).
 
 ## Ngõ cụt / không làm
 - Không dùng Legacy Text (`UnityEngine.UI.Text`), toàn bộ chuyển sang TextMeshPro (`TextMeshProUGUI`).
