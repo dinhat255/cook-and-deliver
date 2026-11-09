@@ -1,0 +1,14 @@
+{
+  "name": "CookAndDeliver.Delivery.Core",
+  "rootNamespace": "CookAndDeliver.Delivery.Core",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true
+}
