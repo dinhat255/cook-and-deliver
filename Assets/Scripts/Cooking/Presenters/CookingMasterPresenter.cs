@@ -4,6 +4,7 @@ using CookAndDeliver.Cooking.Core.Events;
 using CookAndDeliver.Cooking.Core.Services;
 using CookAndDeliver.Cooking.Data;
 using CookAndDeliver.Cooking.UI;
+using CookAndDeliver.Delivery;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -32,6 +33,7 @@ namespace CookAndDeliver.Cooking.Presenters
         public RectTransform potRect;
         public ShipOverlayView shipOverlay;
         public CulinaryCodexPopupView codexPopup;
+        public DaySummaryPopupView daySummaryPopup;
 
         [Header("VFX & UI Pool Layer")]
         public RectTransform flyLayer;
@@ -44,6 +46,8 @@ namespace CookAndDeliver.Cooking.Presenters
 
         bool isGameFrozen;
         bool isPotHinting;
+        bool isTrashModeActive;
+        TrayButtonView cachedTrashButtonView;
 
         void Awake()
         {
@@ -56,6 +60,7 @@ namespace CookAndDeliver.Cooking.Presenters
 
             SetupHeatSlotClicks();
             SetupTrayButtons();
+            SetupBoardClicks();
             SetupPotButton();
             SetupOverlay();
             SetupPresenterEvents();
@@ -109,6 +114,8 @@ namespace CookAndDeliver.Cooking.Presenters
 
         void Start()
         {
+            SetupDeliveryBridge();
+
             if (orderPresenter != null)
             {
                 orderPresenter.InitializeOrders();
@@ -125,7 +132,12 @@ namespace CookAndDeliver.Cooking.Presenters
             economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, 0);
             economyEventChannel?.RaiseComboUpdated(CookingSession.Combo);
             int goal = config != null ? config.shipGoal : 3;
-            economyEventChannel?.RaiseShipCountUpdated(0, goal);
+            economyEventChannel?.RaiseShipCountUpdated(CookingSession.CookedDeliveryOrders.Count, goal);
+
+            if (CookingSession.HasDeliveryResult)
+            {
+                HandleDeliveryReturn();
+            }
         }
 
         void Update()
@@ -208,6 +220,37 @@ namespace CookAndDeliver.Cooking.Presenters
             }
         }
 
+        void SetupBoardClicks()
+        {
+            if (workstationPresenter == null || workstationPresenter.boards == null) return;
+            foreach (var b in workstationPresenter.boards)
+            {
+                if (b == null || b.selectBoardButton == null) continue;
+                var captured = b;
+                captured.selectBoardButton.onClick.AddListener(() => OnBoardClicked(captured));
+            }
+        }
+
+        void OnBoardClicked(BoardView board)
+        {
+            if (isGameFrozen || board == null) return;
+
+            if (isTrashModeActive)
+            {
+                if (board.HaveCounts.Count == 0 && !board.IsComplete && board.PendingCounts.Count == 0)
+                {
+                    ShowToast("Thớt trống", board.RectTransform.position, new Color(0.8f, 0.9f, 1f));
+                    return;
+                }
+
+                if (workstationPresenter != null)
+                {
+                    workstationPresenter.ClearBoard(board);
+                }
+                SetTrashMode(false);
+            }
+        }
+
         void SetupPotButton()
         {
             if (potButton != null)
@@ -257,13 +300,27 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 codexPopup.OnOpenStateChanged += HandleCodexStateChanged;
             }
+
+            if (daySummaryPopup != null)
+            {
+                daySummaryPopup.OnNextDayClicked += OnNextDayTransition;
+                daySummaryPopup.OnCodexClicked += () => codexPopup?.Open();
+                daySummaryPopup.OnMainMenuClicked += OnReturnToMainMenu;
+            }
         }
 
         void OnDestroy()
         {
+            SetTrashMode(false);
             if (codexPopup != null)
             {
                 codexPopup.OnOpenStateChanged -= HandleCodexStateChanged;
+            }
+
+            if (daySummaryPopup != null)
+            {
+                daySummaryPopup.OnNextDayClicked -= OnNextDayTransition;
+                daySummaryPopup.OnMainMenuClicked -= OnReturnToMainMenu;
             }
         }
 
@@ -302,13 +359,21 @@ namespace CookAndDeliver.Cooking.Presenters
         void HandleCookingDeepFrozen()
         {
             isGameFrozen = true;
+            SetTrashMode(false);
             if (orderPresenter != null) orderPresenter.SetPaused(true);
             if (heatStationPresenter != null) heatStationPresenter.SetPaused(true);
             if (workstationPresenter != null) workstationPresenter.SetPaused(true);
 
             DOVirtual.DelayedCall(0.6f, () =>
             {
-                if (shipOverlay != null) shipOverlay.Show(true);
+                if (shipOverlay != null)
+                {
+                    if (shipOverlay.subtitleText != null)
+                    {
+                        shipOverlay.subtitleText.text = $"ĐÃ NẤU XONG {CookingSession.CookedDeliveryOrders.Count} HỘP SHIP CHO NGÀY {CookingSession.CurrentDay}!";
+                    }
+                    shipOverlay.Show(true);
+                }
             }).SetLink(gameObject);
         }
 
@@ -328,6 +393,11 @@ namespace CookAndDeliver.Cooking.Presenters
                     hudPresenter.hudView.coinsText.transform.localScale = Vector3.one;
                     hudPresenter.hudView.coinsText.transform.DOPunchScale(Vector3.one * 0.3f, 0.25f, 6, 0.6f);
                 }
+
+                if (CookingSession.IsDayTargetMet && (daySummaryPopup == null || !daySummaryPopup.IsOpen))
+                {
+                    DOVirtual.DelayedCall(0.6f, () => ShowDaySummary()).SetLink(gameObject);
+                }
             });
         }
 
@@ -336,6 +406,11 @@ namespace CookAndDeliver.Cooking.Presenters
         void OnTrayIngredientClicked(TrayButtonView buttonView)
         {
             if (isGameFrozen || buttonView == null || buttonView.boundIngredient == null) return;
+
+            if (isTrashModeActive)
+            {
+                SetTrashMode(false);
+            }
 
             var ing = buttonView.boundIngredient;
             var cell = (RectTransform)buttonView.transform;
@@ -476,7 +551,38 @@ namespace CookAndDeliver.Cooking.Presenters
 
         void OnHeatSlotClicked(HeatSlotView slot)
         {
-            if (isGameFrozen || slot == null || slot.CurrentIngredient == null) return;
+            if (isGameFrozen || slot == null) return;
+
+            if (isTrashModeActive)
+            {
+                if (slot.CurrentState == HeatSlotState.Idle || slot.CurrentIngredient == null)
+                {
+                    ShowToast("Bếp trống", slot.IconWorldPos, new Color(0.8f, 0.9f, 1f));
+                    return;
+                }
+
+                if (slot.CurrentState == HeatSlotState.Burnt)
+                {
+                    int penalty = config != null ? config.burnPenaltyCoins : 15;
+                    slot.ClearSlot();
+                    DeductEconomy(penalty, true);
+                    ShowToast($"-{penalty} xu (cháy)", slot.IconWorldPos, new Color(1f, 0.35f, 0.3f));
+                }
+                else
+                {
+                    int fee = config != null ? config.trashFeeCoins : 5;
+                    slot.ClearSlot();
+                    DeductEconomy(fee, false);
+                    ShowToast($"-{fee} xu (dọn bếp)", slot.IconWorldPos, new Color(1f, 0.6f, 0.4f));
+                    EmitSparkle(slot.IconWorldPos, new Color(0.7f, 0.7f, 0.7f), 6, 60f);
+                }
+
+                CookingServiceLocator.Get<IAudioService>()?.PlaySound(CookingSound.Trash);
+                SetTrashMode(false);
+                return;
+            }
+
+            if (slot.CurrentIngredient == null) return;
 
             switch (slot.CurrentState)
             {
@@ -488,10 +594,7 @@ namespace CookAndDeliver.Cooking.Presenters
                 case HeatSlotState.Burnt:
                     int penalty = config != null ? config.burnPenaltyCoins : 15;
                     slot.ClearSlot();
-                    CookingSession.Coins = Mathf.Max(0, CookingSession.Coins - penalty);
-                    CookingSession.Combo = 0;
-                    economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, -penalty);
-                    economyEventChannel?.RaiseComboUpdated(0);
+                    DeductEconomy(penalty, true);
                     ShowToast($"-{penalty} xu (cháy)", slot.IconWorldPos, new Color(1f, 0.35f, 0.3f));
                     return;
             }
@@ -523,9 +626,31 @@ namespace CookAndDeliver.Cooking.Presenters
             SendIngredientToBoard(targetBoard, ing, sprite, tint, fromPos);
         }
 
+        void DeductEconomy(int penalty, bool resetCombo)
+        {
+            var economy = CookingServiceLocator.Get<IEconomyService>();
+            if (economy != null)
+            {
+                economy.DeductCoins(penalty);
+                if (resetCombo) economy.ResetCombo();
+            }
+            else
+            {
+                CookingSession.Coins = Mathf.Max(0, CookingSession.Coins - penalty);
+                if (resetCombo) CookingSession.Combo = 0;
+                economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, -penalty);
+                if (resetCombo) economyEventChannel?.RaiseComboUpdated(0);
+            }
+        }
+
         void OnPotClicked()
         {
             if (isGameFrozen || workstationPresenter == null) return;
+
+            if (isTrashModeActive)
+            {
+                SetTrashMode(false);
+            }
 
             if (potRect != null)
             {
@@ -568,19 +693,53 @@ namespace CookAndDeliver.Cooking.Presenters
 
         void OnTrashClicked(TrayButtonView trashView)
         {
-            if (isGameFrozen || trashView == null || workstationPresenter == null) return;
+            if (isGameFrozen || trashView == null) return;
 
+            cachedTrashButtonView = trashView;
             var cell = (RectTransform)trashView.transform;
             cell.DOKill();
             cell.localScale = Vector3.one;
             cell.DOPunchScale(Vector3.one * 0.12f, 0.15f, 5, 0.5f);
 
-            workstationPresenter.ClearActiveBoard();
+            SetTrashMode(!isTrashModeActive);
+        }
+
+        void SetTrashMode(bool active)
+        {
+            isTrashModeActive = active;
+
+            if (cachedTrashButtonView == null && trayButtons != null)
+            {
+                foreach (var btn in trayButtons)
+                {
+                    if (btn != null && btn.isTrashButton)
+                    {
+                        cachedTrashButtonView = btn;
+                        break;
+                    }
+                }
+            }
+
+            if (cachedTrashButtonView != null)
+            {
+                cachedTrashButtonView.SetTrashActive(isTrashModeActive);
+            }
+
+            if (isTrashModeActive)
+            {
+                var pos = cachedTrashButtonView != null ? cachedTrashButtonView.transform.position : transform.position;
+                ShowToast("Chạm thớt hoặc bếp để dọn rác", pos + Vector3.up * 80f, new Color(1f, 0.85f, 0.4f));
+            }
         }
 
         void OnTicketClicked(int index)
         {
             if (isGameFrozen || orderPresenter == null || workstationPresenter == null) return;
+
+            if (isTrashModeActive)
+            {
+                SetTrashMode(false);
+            }
 
             var order = orderPresenter.GetOrder(index);
             if (order != null)
@@ -631,10 +790,121 @@ namespace CookAndDeliver.Cooking.Presenters
             }
         }
 
-        void OnGoToDelivery()
+        void SetupDeliveryBridge()
+        {
+            DeliveryController.ExternalRequestProvider = () =>
+            {
+                return CookingSession.BuildDeliveryRunRequest();
+            };
+
+            DeliveryController.OnExternalRunCompleted = (result) =>
+            {
+                CookingSession.ApplyDeliveryResult(result);
+            };
+
+            DeliveryController.OnExternalReturnRequested = () =>
+            {
+                LoadSceneHandler.LoadSceneByName("Cooking");
+            };
+
+            DeliveryController.ExternalReturnButtonLabel = "Về quán";
+            DeliveryController.PendingOrderCount = CookingSession.CookedDeliveryOrders.Count;
+        }
+
+        void HandleDeliveryReturn()
+        {
+            int earned = CookingSession.LastDeliveryEarned;
+            int penalty = CookingSession.LastDeliveryPenalty;
+            int delivered = CookingSession.LastDeliveredCount;
+            int total = CookingSession.LastDeliveryTotalOrders;
+            bool lost = CookingSession.LastDeliveryCargoLost;
+
+            DOVirtual.DelayedCall(0.5f, () =>
+            {
+                if (lost)
+                {
+                    ShowToast($"HỎNG HÀNG! Phạt {penalty} xu ({delivered}/{total} đơn)", transform.position, new Color(1f, 0.4f, 0.4f));
+                }
+                else
+                {
+                    ShowToast($"GIAO XONG! +{earned} xu ({delivered}/{total} đơn)", transform.position, new Color(0.4f, 1f, 0.4f));
+                }
+
+                workstationPresenter?.ResetShipProgress();
+                CookingSession.HasDeliveryResult = false;
+                CookingSession.ClearDeliveryOrders();
+                DeliveryController.PendingOrderCount = 0;
+
+                if (CookingSession.IsDayTargetMet && (daySummaryPopup == null || !daySummaryPopup.IsOpen))
+                {
+                    DOVirtual.DelayedCall(1.2f, () => ShowDaySummary()).SetLink(gameObject);
+                }
+            }).SetLink(gameObject);
+        }
+
+        void ShowDaySummary()
+        {
+            isGameFrozen = true;
+            if (orderPresenter != null) orderPresenter.SetPaused(true);
+            if (heatStationPresenter != null) heatStationPresenter.SetPaused(true);
+            if (workstationPresenter != null) workstationPresenter.SetPaused(true);
+
+            int day = CookingSession.CurrentDay;
+            int dineInOrders = CookingSession.DayDineInCompleted;
+            int dineInIncome = dineInOrders * 110;
+            int deliveryOrders = CookingSession.LastDeliveredCount;
+            int deliveryGoal = config != null ? config.shipGoal : 3;
+            int deliveryIncome = CookingSession.LastDeliveryEarned;
+            int penalty = CookingSession.LastDeliveryPenalty;
+            int netIncome = dineInIncome + deliveryIncome - penalty;
+            int stars = penalty == 0 && deliveryOrders >= deliveryGoal ? 3 : (deliveryOrders > 0 ? 2 : 1);
+
+            if (daySummaryPopup != null)
+            {
+                daySummaryPopup.Show(day, dineInOrders, dineInIncome, deliveryOrders, deliveryGoal, deliveryIncome, penalty, netIncome, stars);
+            }
+            else
+            {
+                ShowToast($"HOÀN THÀNH NGÀY {day}! LÃI +{netIncome} XU", transform.position, new Color(1f, 0.85f, 0.2f));
+                DOVirtual.DelayedCall(2.2f, () => OnNextDayTransition()).SetLink(gameObject);
+            }
+        }
+
+        void OnNextDayTransition()
+        {
+            if (daySummaryPopup != null) daySummaryPopup.Close();
+
+            CookingSession.AdvanceToNextDay();
+            isGameFrozen = false;
+
+            if (orderPresenter != null)
+            {
+                orderPresenter.SetPaused(false);
+                orderPresenter.InitializeOrders();
+            }
+            if (heatStationPresenter != null) heatStationPresenter.SetPaused(false);
+            if (workstationPresenter != null)
+            {
+                workstationPresenter.SetPaused(false);
+                workstationPresenter.ResetShipProgress();
+            }
+
+            int g = config != null ? config.shipGoal : 3;
+            economyEventChannel?.RaiseShipCountUpdated(0, g);
+            ShowToast($"BẮT ĐẦU NGÀY {CookingSession.CurrentDay}!", transform.position, new Color(0.4f, 1f, 0.4f));
+        }
+
+        void OnReturnToMainMenu()
         {
             DOTween.KillAll();
-            SceneManager.LoadScene("Delivery");
+            LoadSceneHandler.LoadSceneByName("MainMenu");
+        }
+
+        void OnGoToDelivery()
+        {
+            DeliveryController.PendingOrderCount = CookingSession.CookedDeliveryOrders.Count;
+            DOTween.KillAll();
+            LoadSceneHandler.LoadSceneByName("Delivery");
         }
 
         void OnContinueCooking()

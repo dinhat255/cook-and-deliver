@@ -1,3 +1,4 @@
+using CookAndDeliver.Cooking.Data;
 using TMPro;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace CookAndDeliver.Cooking.UI
         public void UpdateShipCount(int current, int goal)
         {
             if (shipText != null)
-                shipText.text = $"SHIP: [{current}/{goal}] HỘP";
+                shipText.text = $"NGÀY {CookingSession.CurrentDay} · SHIP: [{current}/{goal}]";
         }
     }
 }

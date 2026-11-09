@@ -13,7 +13,7 @@
   3. `BottomZone` (Bottom-Stretch, cao 400px): Chứa `ZoneTray` mat, `TrayLine`, `TrayButtonView` (Tray 6x2).
   4. `FlyLayer`: Nằm trong `GameFrame9x16` (0,0 đến 1,1) để tọa độ bay parabol `InverseTransformPoint` đồng nhất 1-1 với thớt và khay.
   5. `ShipFullOverlay`, `OrderQueuePopup`, `CulinaryCodexPopup`: Giữ ở cấp Canvas ngoài cùng để dimmer làm mờ toàn bộ màn hình khi mở modal.
-- Asset CC0 / miễn phí, pixel art. Hạn chế asset: không vẽ sprite trạng thái trung gian.
+- Asset pixel art: 100% 11 IngredientSO và 8 RecipeSO sử dụng bộ sprite custom tách nền trong suốt tại `Assets/Art/Cooking/Food/CustomPixel/` (các biến thể phụ lưu tại `CustomPixel/Variants/`). Hạn chế asset: không vẽ sprite trạng thái trung gian.
 - Người dùng phụ trách phần Cooking. Phần Delivery do người khác làm (scene `Delivery`).
 
 ## Quyết định kiến trúc (phần Cooking)
@@ -62,6 +62,7 @@
 - Smart-tap: chạm 1 lần, sprite bay cung parabol 0.18s. Thớt Active ưu tiên, nếu không nhận thì thử thớt còn lại.
 - Chọn phương án thân thiện: nguyên liệu sai bị bật lại, không hỏng món, không phạt. Chỉ phạt khi để cháy (-15 xu, mất combo) hoặc dọn thớt (-5 xu).
 - Đủ 3 hộp ship: Deep Freeze bếp, hiện overlay (Giao hàng -> scene Delivery, hoặc tiếp tục để test).
+- Chế độ Thùng rác đa mục tiêu (Toggle Trash Mode): Nút Thùng rác hoạt động theo dạng bật/tắt (Toggle). Khi bật (nút pulsing nhịp nhàng, chữ 'HỦY MÓN', dấu X vàng), chạm vào Thớt sẽ dọn thớt (-5 xu), chạm vào Thiết bị gia nhiệt (Vỉ nướng, Lò ép, Chảo) sẽ dọn sạch ô bếp (-5 xu dọn dẹp, hoặc -15 xu nếu cháy). Tự động tắt chế độ sau khi dọn xong hoặc khi người chơi chạm lấy nguyên liệu khác. Giải quyết triệt để bài toán kẹt nguyên liệu không cháy (như bánh mì trong lò ép).
 - Hệ thống mở khóa công thức và Sổ tay ẩm thực (Recipe Progression & Culinary Codex):
   - `IRecipeProgressionService` & `RecipeProgressionService`: Quản lý mở khóa món ăn lưu bền vững kết hợp đa tầng: đọc/ghi bất đồng bộ qua `SaveLoadManager` (`GameProgressSLO`) và đồng bộ `PlayerPrefs` (`RECIPE_UNLOCKED_{id}`) để bảo toàn tương thích ngược.
   - `RecipeSO` mở rộng: Lưu trữ mô tả (`dishDescription`), nguồn gốc lịch sử văn hóa (`culturalStory`), đặc trưng vị giác (`flavorProfile`), mẹo đầu bếp (`chefTip`), trạng thái mở khóa mặc định (`isUnlockedByDefault`) và học phí mở khóa (`unlockCostCoins`).
@@ -70,6 +71,15 @@
   - Danh mục mở rộng lên 8 món: Phở Bò Tái, Bánh Mì Thịt Nướng, Tteokbokki Cay (mở mặc định); K-Bánh Mì Bulgogi, Phở Kim Chi Bulgogi, Tteokbokki Cung Đình, Bánh Mì Thập Cẩm Giao Hòa, Mì Xào Kim Chi Thịt Heo (mở qua học nấu ăn).
 
 - Hệ thống màu sắc khay nguyên liệu (Category-based Color Palette): Màu nền ô nguyên liệu được cấu hình Data-driven trực tiếp qua trường `slotBackgroundColor` trong `IngredientSO` theo nhóm dinh dưỡng/ẩm thực (Rau củ: xanh lá tươi `#2E7D32`, Bánh mì: vàng hổ phách `#C27D28`, Bánh phở/gạo: xám bạc khói `#4A5568`, Thịt heo: hồng tươi `#8C3B4A`, Thịt bò: đỏ nâu steak `#6B2D2B`, Sốt cay: đỏ ớt `#A83226`, Nước tương: nâu sô-cô-la `#3E2723`, Thùng rác: đỏ cờ `#C72929`), tự động đồng bộ cả trong Scene View (`OnValidate`) và Runtime (`Awake`).
+- Hệ thống cầu nối Cooking - Delivery và Gameplay loop theo ngày (Day-based Loop):
+  - `CookingSession`: Lưu trữ bền vững xuyên scene danh sách món ship vừa nấu (`CookedDeliveryOrders`), bộ đệm kết quả giao hàng (`LastDeliveryEarned`, `LastDeliveryPenalty`, `LastDeliveryCargoLost`), và tiến trình ca kinh doanh (`CurrentDay`, `DayTargetDineIn`, `DayTargetDelivery`, `DayDineInCompleted`, `DayDeliveryCompleted`).
+  - Cầu nối Assembly độc lập (Decoupled Bridge): `DeliveryController` mở các static hooks (`ExternalRequestProvider`, `OnExternalRunCompleted`, `OnExternalReturnRequested`, `ExternalReturnButtonLabel`, `PendingOrderCount`) giúp Cooking liên kết 2 chiều mà không tạo phụ thuộc vòng (circular reference) hay ép sửa asmdef của Delivery.
+  - Xử lý kinh tế khi ship hỏng: Trường hợp `CargoLost` (độ nguyên vẹn về 0%), người chơi bảo lưu điểm các đơn đã giao trước đó, bị phạt phí bồi thường cho khách (-50 xu/món chưa giao). Không gây Game Over văng app, cho phép bấm "Về quán" tiếp tục ca kinh doanh.
+  - Đóng ca và chuyển ngày: Quán hoàn thành cả đơn tại bàn lẫn chuyến giao hàng thì kích hoạt hoàn thành ca và chuyển sang ngày kế tiếp (`AdvanceToNextDay`).
+  - Màn hình chính (MainMenu Scene): `Assets/Scenes/MainMenu.unity` là scene khởi động đầu tiên (Build Index 0). `MainMenuController` điều khiển nút "Vào bếp mở quán" (hoặc "Tiếp tục ngày X"), hiển thị ví xu, tiến trình quán và bật/tắt âm thanh.
+  - Popup tổng kết ca (DaySummaryPopupView): Modal hóa đơn (Daily Receipt) nằm ngay trong `CookingCanvas` của `Cooking.unity`. Hiển thị chi tiết doanh thu đơn tại bàn, đơn ship, phí bồi thường, lãi ròng và sao đánh giá. Cho phép mở Sổ tay ẩm thực học món mới hoặc bấm "Mở cửa ngày mới" để bắt đầu ca tiếp theo ngay tại chỗ (zero-loading).
+  - Tuân thủ Unity MCP: Toàn bộ việc quản lý, chỉnh sửa Scene, Component và GameObjects được thực hiện trực tiếp qua các công cụ Unity MCP, không duy trì script Editor trung gian trong mã nguồn dự án.
+  - Hệ thống chuyển cảnh mượt (SceneLoader): `SceneLoader.unity` (Build Index 3) làm scene Additive trung gian. `LoadSceneHandler` hỗ trợ nạp scene qua cả build index lẫn tên scene (`ResolveBuildIndex`), loại bỏ lỗi index -1. `FadeableLoader` dùng UniTask và DOTween độc lập timescale (`SetUpdate(true)`), tự động bật `raycastTarget` ngăn chạm nút lúc chuyển cảnh, màu fader chuẩn tông ấm `#141211`. Toàn bộ chuyển scene giữa MainMenu, Cooking và Delivery đều qua `LoadSceneHandler.LoadSceneByName`.
 
 ## Ngõ cụt / không làm
 - Không dùng Legacy Text (`UnityEngine.UI.Text`), toàn bộ chuyển sang TextMeshPro (`TextMeshProUGUI`).

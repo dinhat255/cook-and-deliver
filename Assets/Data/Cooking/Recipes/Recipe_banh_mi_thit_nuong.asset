@@ -22,7 +22,7 @@ MonoBehaviour:
   chefTip: "\xC9p n\xF3ng v\u1ECF b\xE1nh m\xEC trong l\xF2 tr\u01B0\u1EDBc khi k\u1EB9p th\u1ECBt \u0111\u1EC3 b\xE1nh gi\u1EEF \u0111\u1ED9 gi\xF2n tan l\xE2u nh\u1EA5t"
   isUnlockedByDefault: 1
   unlockCostCoins: 0
-  finishedDishSprite: {fileID: 21300000, guid: 405bbe10f4a20344c85111065a2418bd, type: 3}
+  finishedDishSprite: {fileID: 21300000, guid: 0addc424b76b55d2aa6008fba8561fd6, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}
     requiredAmount: 1

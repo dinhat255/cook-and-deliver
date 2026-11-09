@@ -1,4 +1,5 @@
 using CookAndDeliver.Cooking.Data;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,6 +83,57 @@ namespace CookAndDeliver.Cooking.UI
             {
                 inner.color = targetColor;
             }
+        }
+
+        private Tween trashPulseTween;
+
+        public void SetTrashActive(bool active)
+        {
+            if (!isTrashButton) return;
+
+            trashPulseTween?.Kill();
+
+            if (active)
+            {
+                if (labelText != null) labelText.text = "HỦY MÓN";
+                if (trashXText != null)
+                {
+                    trashXText.color = Color.yellow;
+                }
+                if (backgroundImage != null)
+                {
+                    backgroundImage.color = new Color(0.95f, 0.2f, 0.2f);
+                }
+                if (innerBackgroundImage != null)
+                {
+                    innerBackgroundImage.color = new Color(0.95f, 0.2f, 0.2f);
+                }
+                trashPulseTween = transform.DOScale(1.1f, 0.35f)
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo);
+            }
+            else
+            {
+                transform.localScale = Vector3.one;
+                if (labelText != null) labelText.text = "Thùng rác";
+                if (trashXText != null)
+                {
+                    trashXText.color = Color.white;
+                }
+                Color defaultColor = new Color(0.78f, 0.16f, 0.16f);
+                if (backgroundImage != null) backgroundImage.color = defaultColor;
+                if (innerBackgroundImage != null) innerBackgroundImage.color = defaultColor;
+            }
+        }
+
+        private void OnDisable()
+        {
+            trashPulseTween?.Kill();
+        }
+
+        private void OnDestroy()
+        {
+            trashPulseTween?.Kill();
         }
     }
 }

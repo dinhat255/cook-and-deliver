@@ -22,7 +22,7 @@ MonoBehaviour:
   chefTip: "Cho kim chi v\xE0o t\xF4 tr\u01B0\u1EDBc khi chan n\u01B0\u1EDBc d\xF9ng s\xF4i \u0111\u1EC3 n\u01B0\u1EDBc ph\u1EDF h\xF2a quy\u1EC7n men chua thanh c\u1EE7a kim chi"
   isUnlockedByDefault: 0
   unlockCostCoins: 300
-  finishedDishSprite: {fileID: 21300000, guid: f2d50a2604927584a8d7f0378811b32b, type: 3}
+  finishedDishSprite: {fileID: 21300000, guid: f7d22188a74b5217a623fd04b1171a02, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}
     requiredAmount: 1

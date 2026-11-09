@@ -5,6 +5,7 @@ using CookAndDeliver.Cooking.Core.Events;
 using CookAndDeliver.Cooking.Core.Services;
 using CookAndDeliver.Cooking.Data;
 using CookAndDeliver.Cooking.UI;
+using CookAndDeliver.Delivery;
 using DG.Tweening;
 using UnityEngine;
 
@@ -105,6 +106,8 @@ namespace CookAndDeliver.Cooking.Presenters
                 int goal = config != null ? config.shipGoal : 3;
                 economyEventChannel?.RaiseShipCountUpdated(0, goal);
             }
+            CookingSession.ClearDeliveryOrders();
+            DeliveryController.PendingOrderCount = 0;
         }
 
         public void SetActiveBoard(BoardView board)
@@ -260,19 +263,31 @@ namespace CookAndDeliver.Cooking.Presenters
 
             CookingServiceLocator.Get<IAudioService>()?.PlaySound(CookingSound.Pack);
 
-            if (board.isDeliveryBoard && economy != null)
+            if (board.isDeliveryBoard)
             {
-                int goal = config != null ? config.shipGoal : 3;
-                economy.RecordShipOrderCompleted(goal);
+                CookingSession.AddCookedDeliveryOrder(recipe.id, recipe.recipeName, recipe.basePrice);
+                DeliveryController.PendingOrderCount = CookingSession.CookedDeliveryOrders.Count;
+                if (economy != null)
+                {
+                    int goal = config != null ? config.shipGoal : 3;
+                    economy.RecordShipOrderCompleted(goal);
+                }
+            }
+            else
+            {
+                CookingSession.DayDineInCompleted++;
             }
         }
 
         public void ClearActiveBoard()
         {
-            if (isPaused) return;
-
             var b = activeBoard != null ? activeBoard : (boards != null && boards.Length > 0 ? boards[0] : null);
-            if (b == null) return;
+            ClearBoard(b);
+        }
+
+        public void ClearBoard(BoardView b)
+        {
+            if (isPaused || b == null) return;
 
             if (b.HaveCounts.Count == 0 && !b.IsComplete && b.PendingCounts.Count == 0)
             {

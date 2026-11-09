@@ -15,7 +15,7 @@ MonoBehaviour:
   id: kimchi
   displayName: Kim chi
   route: 0
-  rawSprite: {fileID: 21300000, guid: bb23348677bed5644b4871d43c894962, type: 3}
+  rawSprite: {fileID: 21300000, guid: 5fa20b2e57f556eba6b9b977b8a6824e, type: 3}
   cookedSprite: {fileID: 0}
   cookedTint: {r: 1, g: 1, b: 1, a: 1}
   slotBackgroundColor: {r: 0.18, g: 0.49, b: 0.196, a: 1}

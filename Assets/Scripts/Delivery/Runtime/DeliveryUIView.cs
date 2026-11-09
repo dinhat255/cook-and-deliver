@@ -47,9 +47,9 @@ namespace CookAndDeliver.Delivery
 
         public void SetReady(DeliveryConfigSO config, DeliveryProgress data)
         {
-            readyOrderCount = config.settings.OrderCount;
-            readyDescription.text = config.settings.OrderCount + " đơn";
-            readyRecord.text = "Kỷ lục " + data.BestFor(config.settings.OrderCount);
+            readyOrderCount = DeliveryController.PendingOrderCount > 0 ? DeliveryController.PendingOrderCount : config.settings.OrderCount;
+            readyDescription.text = readyOrderCount + " đơn";
+            readyRecord.text = "Kỷ lục " + data.BestFor(readyOrderCount);
         }
 
         public void Render(DeliverySimulation sim)
@@ -89,7 +89,13 @@ namespace CookAndDeliver.Delivery
         private Sprite FoodFor(string name)
         {
             var lower = name.ToLowerInvariant();
-            var index = lower.Contains("bánh mì") ? 1 : lower.Contains("trà") ? 2 : lower.Contains("mì") ? 3 : lower.Contains("bánh") ? 4 : lower.Contains("cơm") ? 0 : 2;
+            var index = lower.Contains("bánh mì") ? 1 
+                      : lower.Contains("phở") ? 3 
+                      : lower.Contains("tteok") ? 3 
+                      : lower.Contains("trà") ? 2 
+                      : lower.Contains("mì") ? 3 
+                      : lower.Contains("bánh") ? 4 
+                      : lower.Contains("cơm") ? 0 : 2;
             return foodSprites[index % foodSprites.Length];
         }
 
@@ -112,6 +118,13 @@ namespace CookAndDeliver.Delivery
             resultsScore.text = result.Score.ToString();
             resultsSummary.text = result.DeliveredCount + "/" + result.OrderCount + " đơn";
             resultRecord.text = saved ? "Kỷ lục " + progress.BestFor(result.OrderCount) : "Chưa lưu được";
+
+            if (!string.IsNullOrEmpty(DeliveryController.ExternalReturnButtonLabel) && resultHomeButton != null)
+            {
+                var label = resultHomeButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (label != null) label.text = DeliveryController.ExternalReturnButtonLabel;
+            }
+
             for (var i = 0; i < result.Orders.Count; i++)
             {
                 if (i >= rows.Count) rows.Add(Instantiate(resultRowPrefab, resultContent));

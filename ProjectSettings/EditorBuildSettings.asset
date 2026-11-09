@@ -6,11 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 75cb0c587e80e0a45bbb45058cde6b99
+  - enabled: 1
     path: Assets/Scenes/Cooking.unity
     guid: ad38ff27966349a28869bf3e2178ec22
   - enabled: 1
     path: Assets/Scenes/Delivery.unity
     guid: d15757d7d3d347c6a015423dfe440bbd
+  - enabled: 1
+    path: Assets/Scenes/SceneLoader.unity
+    guid: 0e23b73c66fa4a74ba442f3c424263fd
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
