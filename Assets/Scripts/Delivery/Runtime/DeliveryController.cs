@@ -16,10 +16,8 @@ namespace CookAndDeliver.Delivery
         public DeliverySimulation Simulation { get; private set; }
         public DeliveryConfigSO Config => config;
         public DeliveryProgressStore Progress { get; private set; }
-        private float accumulator;
         private float hudTime;
         private ScreenOrientation previousOrientation;
-        private const float Step = .02f;
 
         private void Awake()
         {
@@ -50,7 +48,7 @@ namespace CookAndDeliver.Delivery
         public void StartDefaultRun(int? seed = null) { StartRun(config.CreateRequest(seed ?? Environment.TickCount)); }
         public void StartRun(DeliveryRunRequest request)
         {
-            input.Cancel(); world.ResetView(); accumulator = 0; hudTime = 0;
+            input.Cancel(); world.ResetView(); hudTime = 0;
             Simulation.StartRun(request);
             ui.Render(Simulation);
         }
@@ -59,18 +57,18 @@ namespace CookAndDeliver.Delivery
         public void Resume() { input.Cancel(); Simulation.Resume(); Play(tapClip); }
         public void AbortRun()
         {
-            input.Cancel(); Simulation.AbortRun(); world.ResetView(); accumulator = 0;
+            input.Cancel(); Simulation.AbortRun(); world.ResetView();
             world.Render(Simulation, 0); ui.Render(Simulation); Play(tapClip);
         }
         private void Update()
         {
             var dt = Mathf.Min(Time.unscaledDeltaTime, .1f);
-            accumulator += dt;
-            while (accumulator >= Step) { Simulation.Tick(Step); accumulator -= Step; }
-            world.Render(Simulation, dt);
+            Simulation.Tick(dt);
+            world.Render(Simulation, dt, Simulation.InterpolationAlpha);
             hudTime -= dt;
             if (hudTime <= 0) { ui.Render(Simulation); hudTime = .1f; }
             if (Simulation.State == DeliveryState.Running) ui.Tick(dt);
+            ui.AnimateDeliveryWarning(Simulation, world.DeliveryPulse);
         }
         private void StateChanged()
         {
