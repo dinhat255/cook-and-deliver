@@ -1,0 +1,6 @@
+{
+  "name": "CookAndDeliver.Delivery.Runtime",
+  "rootNamespace": "CookAndDeliver.Delivery",
+  "references": ["CookAndDeliver.Delivery.Core", "UnityEngine.UI", "Unity.TextMeshPro", "Unity.InputSystem"],
+  "autoReferenced": true
+}

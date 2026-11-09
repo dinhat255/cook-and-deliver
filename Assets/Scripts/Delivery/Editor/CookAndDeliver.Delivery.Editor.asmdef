@@ -1,0 +1,7 @@
+{
+  "name": "CookAndDeliver.Delivery.Editor",
+  "rootNamespace": "CookAndDeliver.Delivery.Editor",
+  "references": ["CookAndDeliver.Delivery.Core", "CookAndDeliver.Delivery.Runtime", "UnityEngine.UI", "Unity.TextMeshPro", "Unity.InputSystem"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
