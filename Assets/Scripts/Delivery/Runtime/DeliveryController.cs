@@ -24,10 +24,8 @@ namespace CookAndDeliver.Delivery
         public static string ExternalReturnButtonLabel = "Về quán";
         public static int PendingOrderCount = 0;
 
-        private float accumulator;
         private float hudTime;
         private ScreenOrientation previousOrientation;
-        private const float Step = .02f;
 
         private void Awake()
         {
@@ -72,7 +70,6 @@ namespace CookAndDeliver.Delivery
         {
             input.Cancel();
             world.ResetView();
-            accumulator = 0;
             hudTime = 0;
             Simulation.StartRun(request);
             ui.Render(Simulation);
@@ -130,7 +127,6 @@ namespace CookAndDeliver.Delivery
             input.Cancel();
             Simulation.AbortRun();
             world.ResetView();
-            accumulator = 0;
             world.Render(Simulation, 0);
             ui.Render(Simulation);
             Play(tapClip);
@@ -139,12 +135,12 @@ namespace CookAndDeliver.Delivery
         private void Update()
         {
             var dt = Mathf.Min(Time.unscaledDeltaTime, .1f);
-            accumulator += dt;
-            while (accumulator >= Step) { Simulation.Tick(Step); accumulator -= Step; }
-            world.Render(Simulation, dt);
+            Simulation.Tick(dt);
+            world.Render(Simulation, dt, Simulation.InterpolationAlpha);
             hudTime -= dt;
             if (hudTime <= 0) { ui.Render(Simulation); hudTime = .1f; }
             if (Simulation.State == DeliveryState.Running) ui.Tick(dt);
+            ui.AnimateDeliveryWarning(Simulation, world.DeliveryPulse);
         }
 
         private void StateChanged()

@@ -49,6 +49,7 @@ namespace CookAndDeliver.Delivery.Editor
                 if (renderer.sprite == null) throw new System.InvalidOperationException("Missing sourced tree " + trees[i]);
                 renderer.sharedMaterial = material; renderer.sortingOrder = -5;
                 renderer.transform.localScale = Vector3.one;
+                AddShadow(renderer, 3, -3, 0.46666667f);
                 treePrefabs[i] = PrefabUtility.SaveAsPrefabAsset(tree, Prefabs + "DeliverySidewalkTree" + (i + 1) + ".prefab");
                 Object.DestroyImmediate(tree);
             }
@@ -64,6 +65,24 @@ namespace CookAndDeliver.Delivery.Editor
                 tree.transform.localPosition = new Vector3((side == 0 ? 20 : 250) / Ppu, (40 + row * 80 + side * 40) / Ppu, 0);
                 world.scenery[i] = tree.transform;
             }
+        }
+
+        // Cooking layers a translucent black Image under its foreground. Use the same
+        // image-layer technique in the world, reusing the original sprite silhouette.
+        internal static SpriteRenderer AddShadow(SpriteRenderer source, float x, float y, float alpha)
+        {
+            var obj = new GameObject(source.name + " Shadow") { layer = source.gameObject.layer };
+            obj.transform.SetParent(source.transform.parent, false);
+            obj.transform.localPosition = source.transform.localPosition + new Vector3(x / Ppu, y / Ppu, 0);
+            obj.transform.localRotation = source.transform.localRotation;
+            obj.transform.localScale = source.transform.localScale;
+            var shadow = obj.AddComponent<SpriteRenderer>();
+            shadow.sprite = source.sprite;
+            shadow.sharedMaterial = source.sharedMaterial;
+            shadow.sortingLayerID = source.sortingLayerID;
+            shadow.sortingOrder = -6; // Above road paint (-7), below trees, vehicles and markers.
+            shadow.color = new Color(0, 0, 0, alpha);
+            return shadow;
         }
 
         private static void Tiled(Transform parent, Material material, string name, int id, float x, float width, int order)

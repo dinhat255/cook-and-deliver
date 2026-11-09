@@ -25,6 +25,22 @@ namespace CookAndDeliver.Delivery
         private float toastTime;
         private int readyOrderCount = 3;
 
+        // Called every rendered frame, independently of the 10 Hz text/score refresh.
+        public void AnimateDeliveryWarning(DeliverySimulation sim, float pulse)
+        {
+            if (sim.State == DeliveryState.Paused) return;
+            var warning = sim.State == DeliveryState.Running && sim.DistanceToNextStop <= sim.BaseSpeed * warningSeconds;
+            directionIcon.gameObject.SetActive(warning);
+            directionIcon.rectTransform.localScale = Vector3.one * (warning ? Mathf.Lerp(.92f, 1.12f, pulse) : 1);
+            var ink = new Color32(36, 29, 26, 255);
+            directionIcon.color = warning ? Color.Lerp(ink, new Color(1, .4f, .02f), pulse) : ink;
+            if (!warning) return;
+            directionIcon.sprite = sim.NextStopLane == 0 ? arrowLeft : arrowRight;
+            var color = directionIcon.color;
+            color.a = Mathf.Lerp(.35f, 1, pulse);
+            directionIcon.color = color;
+        }
+
         private void Start() { FocusVisiblePanel(); }
 
         private void FocusVisiblePanel()
