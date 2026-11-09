@@ -7,6 +7,7 @@ namespace CookAndDeliver.Delivery
     public sealed class DeliveryHazardVisual : MonoBehaviour
     {
         public SpriteRenderer single;
+        public SpriteRenderer trafficShadow;
         public SpriteRenderer[] cones;
         public SpriteRenderer[] barriers;
         private HazardKind visibleKind = (HazardKind)(-1);
@@ -18,6 +19,7 @@ namespace CookAndDeliver.Delivery
                 var isCone = hazard.Kind == HazardKind.Cone;
                 var isBarrier = hazard.Kind == HazardKind.Barrier;
                 single.gameObject.SetActive(!isCone && !isBarrier);
+                trafficShadow.gameObject.SetActive(hazard.IsTraffic);
                 foreach (var piece in cones) piece.gameObject.SetActive(isCone);
                 foreach (var piece in barriers) piece.gameObject.SetActive(isBarrier);
                 visibleKind = hazard.Kind;
@@ -37,6 +39,12 @@ namespace CookAndDeliver.Delivery
                 single.sprite = sprites[(int)hazard.Kind];
                 single.transform.localScale = Vector3.one * (hazard.IsTraffic ? 1.5f : 3f);
                 single.color = color;
+                if (hazard.IsTraffic)
+                {
+                    trafficShadow.sprite = single.sprite;
+                    trafficShadow.transform.localScale = single.transform.localScale;
+                    trafficShadow.color = new Color(0, 0, 0, .4f * color.a);
+                }
             }
         }
     }

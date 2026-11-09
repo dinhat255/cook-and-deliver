@@ -189,6 +189,7 @@ namespace CookAndDeliver.Delivery.Editor
             root.player = player.transform;
             player.transform.localScale = Vector3.one;
             root.bike = Sprite("Bike", player.transform, LoadExisting("Assets/Art/Delivery/Bike Green.png"), 0, 0, 5);
+            root.bikeShadow = DeliveryEnvironmentBuilder.AddShadow(root.bike, 2, -2, 0.42f);
             root.ridingPose = LoadExisting("Assets/Art/Delivery/Rider Green/Rider Green.png");
             root.idlePose = LoadExisting("Assets/Art/Delivery/Rider Green/Rider Green Idle.png");
             root.trashedPose = LoadExisting("Assets/Art/Delivery/Rider Green/Rider Green Trashed.png");
@@ -198,6 +199,8 @@ namespace CookAndDeliver.Delivery.Editor
             var hazard = new GameObject("Pooled road hazard") { layer = WorldLayer };
             var visual = hazard.AddComponent<DeliveryHazardVisual>();
             visual.single = Sprite("Single hazard", hazard.transform, LoadSprite("Props/Pothole"), 0, 0, 2);
+            visual.trafficShadow = DeliveryEnvironmentBuilder.AddShadow(visual.single, 3, -3, 0.4f);
+            visual.trafficShadow.gameObject.SetActive(false);
             visual.cones = new SpriteRenderer[4];
             for (var i = 0; i < visual.cones.Length; i++)
             {

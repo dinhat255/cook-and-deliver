@@ -17,6 +17,7 @@ namespace CookAndDeliver.Delivery.Core
         private float accumulator;
         private float invulnerabilityRemaining;
         private float slowdownRemaining;
+        private float cruiseSpeed;
         private float laneElapsed;
         private float laneStartX;
         private int queuedDirection;
@@ -24,8 +25,12 @@ namespace CookAndDeliver.Delivery.Core
 
         public DeliveryState State { get; private set; } = DeliveryState.Ready;
         public float RiderX { get; private set; } = DeliverySettings.LaneX(1);
+        public float PreviousRiderX { get; private set; } = DeliverySettings.LaneX(1);
         public int Lane { get; private set; } = 1;
         public float Distance { get; private set; }
+        public float PreviousDistance { get; private set; }
+        // View-only interpolation: collision and route logic always use the fixed-step state.
+        public float InterpolationAlpha => State == DeliveryState.Running ? Clamp01(accumulator / DeliverySettings.FixedStep) : 1f;
         public int Integrity { get; private set; }
         public int Score { get; private set; }
         public int DeliveredCount { get; private set; }
@@ -39,8 +44,19 @@ namespace CookAndDeliver.Delivery.Core
         public IReadOnlyList<DeliveryHazard> Hazards => visibleView;
         public DeliveryRunRequest Request { get; private set; }
         public DeliveryRunResult Result { get; private set; }
-        public float Speed => State == DeliveryState.Running
-            ? BaseSpeed * (slowdownRemaining > 0f ? settings.SlowdownMultiplier : 1f) : 0f;
+        public float Speed
+        {
+            get
+            {
+                if (State != DeliveryState.Running) return 0f;
+                float recovery = slowdownRemaining > 0f
+                    ? Clamp01(1f - slowdownRemaining / settings.SlowdownSeconds) : 1f;
+                recovery = recovery * recovery * (3f - 2f * recovery);
+                float multiplier = settings.SlowdownMultiplier + (1f - settings.SlowdownMultiplier) * recovery;
+                // Never exceed the planner's per-leg speed, including custom decreasing speed arrays.
+                return Math.Min(cruiseSpeed, BaseSpeed) * multiplier;
+            }
+        }
         public float BaseSpeed => settings.SpeedForLeg(CurrentOrderIndex);
         public float CurrentOrderProgress => Request == null ? 0f : CurrentOrderIndex >= Request.Orders.Count
             ? 1f : Clamp01((Distance - CurrentOrderIndex * settings.LegLength) / settings.LegLength);
@@ -70,6 +86,7 @@ namespace CookAndDeliver.Delivery.Core
             if (request == null) throw new ArgumentNullException(nameof(request));
             Reset();
             Request = request;
+            cruiseSpeed = BaseSpeed * 0.6f;
             stopLanes = new int[request.Orders.Count];
             var random = new Random(unchecked(request.Seed ^ 0x61B48A2D));
             for (int i = 0; i < stopLanes.Length; i++)
@@ -154,6 +171,10 @@ namespace CookAndDeliver.Delivery.Core
 
             float previousX = RiderX;
             float previousDistance = Distance;
+            PreviousRiderX = previousX;
+            PreviousDistance = previousDistance;
+            float speedDelta = BaseSpeed - cruiseSpeed;
+            cruiseSpeed += Math.Sign(speedDelta) * Math.Min(Math.Abs(speedDelta), settings.Acceleration * dt);
             float nextDistance = Distance + Speed * dt;
             float oldSlowdown = slowdownRemaining;
             invulnerabilityRemaining = Math.Max(0f, invulnerabilityRemaining - dt);
@@ -293,6 +314,7 @@ namespace CookAndDeliver.Delivery.Core
             Request = null;
             Result = null;
             Distance = 0f;
+            PreviousDistance = 0f;
             Score = 0;
             DeliveredCount = 0;
             CollisionCount = 0;
@@ -300,11 +322,13 @@ namespace CookAndDeliver.Delivery.Core
             Integrity = settings.StartingIntegrity;
             Lane = 1;
             RiderX = DeliverySettings.LaneX(1);
+            PreviousRiderX = RiderX;
             queuedDirection = 0;
             changingLane = false;
             laneElapsed = 0f;
             invulnerabilityRemaining = 0f;
             slowdownRemaining = 0f;
+            cruiseSpeed = 0f;
             accumulator = 0f;
             CountdownRemaining = 0f;
             orderResults.Clear();
