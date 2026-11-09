@@ -1,13 +1,18 @@
 # Project memory: Bếp Giao Hòa (cook-and-deliver)
 
 ## Ràng buộc bất biến
-- Unity 6000.3.16f1, URP 2D, màn dọc 9:16 (1080x1920), Android.
-- Canvas Scaler: Scale With Screen Size, 1080x1920, Match Width = 0 (bảo toàn bề ngang 1080px trên mọi tỷ lệ màn hình dài như 20:9, 19.5:9).
-- Cấu trúc Canvas phân vùng độc lập (Zone-based UI Architecture):
-  1. `TopZone` (Top-Stretch, cao 336px): Chứa `ZoneHud` background mat, `HudView`, KDS rail 2 vé (`Ticket0`, `Ticket1`), nút huy hiệu hàng chờ (`QueueBadgeButton`).
-  2. `CookingZone` (Middle-Stretch, cao 960px): Chứa `ZoneStations` mat, `ZoneCounter` mat, `HeatSlotView` (Stations), `BoardView` (Boards).
-  3. `BottomZone` (Bottom-Stretch, cao 624px): Chứa `ZoneTray` mat, `TrayLine`, `TrayButtonView` (Tray 6x2).
-  4. `FlyLayer`, `OrderQueuePopup` & `ShipFullOverlay`: Giữ nguyên Full-Screen trên cùng để xử lý hiệu ứng bay hạt FX, popup danh sách đơn chờ và thông báo hoàn thành chuyến giao.
+- Unity 6000.3.16f1, URP 2D, màn dọc 9:16 (1080x1920), Android/iOS.
+- Kiến trúc Pillarbox/Safe Framing & Safe Area:
+  1. `PillarboxBackground`: Neo tràn viền (0,0 đến 1,1) màu nền tối ấm (#141211), ngăn hở viền xanh của Camera.
+  2. `SafeAreaContainer`: Tự động co giãn theo `Screen.safeArea` qua `SafeAreaFitter.cs`, cách ly hoàn toàn khỏi tai thỏ, notch và thanh cử chỉ đáy.
+  3. `GameFrame9x16`: Nằm trong `SafeAreaContainer`, gắn `AspectRatioFitter` (FitInParent, 9:16 = 0.5625). Bảo toàn 100% tỷ lệ và khoảng cách thiết kế trên mọi màn hình từ 20:9 đến tablet 4:3.
+  4. `DynamicCanvasScaler.cs`: Tự động chuyển đổi `matchWidthOrHeight` linh hoạt giữa 0 (Phone dài) và 1 (Tablet vuông).
+- Cấu trúc các vùng chơi (nằm trọn trong `GameFrame9x16`):
+  1. `TopZone` (Top-Stretch, cao 416px): Chứa `ZoneHud` background mat, `HudView`, KDS rail 2 vé (`Ticket0`, `Ticket1`), nút huy hiệu hàng chờ (`QueueBadgeButton`).
+  2. `CookingZone` (Middle-Stretch, cao 990px): Chứa `ZoneStations` mat, `ZoneCounter` mat, `HeatSlotView` (Stations), `BoardView` (Boards).
+  3. `BottomZone` (Bottom-Stretch, cao 400px): Chứa `ZoneTray` mat, `TrayLine`, `TrayButtonView` (Tray 6x2).
+  4. `FlyLayer`: Nằm trong `GameFrame9x16` (0,0 đến 1,1) để tọa độ bay parabol `InverseTransformPoint` đồng nhất 1-1 với thớt và khay.
+  5. `ShipFullOverlay`, `OrderQueuePopup`, `CulinaryCodexPopup`: Giữ ở cấp Canvas ngoài cùng để dimmer làm mờ toàn bộ màn hình khi mở modal.
 - Asset CC0 / miễn phí, pixel art. Hạn chế asset: không vẽ sprite trạng thái trung gian.
 - Người dùng phụ trách phần Cooking. Phần Delivery do người khác làm (scene `Delivery`).
 
@@ -63,6 +68,8 @@
   - `OrderPresenter.SpawnOrder`: Rút ngẫu nhiên đơn hàng từ tập các món đã học (`RecipeDatabaseSO.GetRandomUnlockedRecipe`).
   - `CulinaryCodexPopupView`: Sổ tay ẩm thực và học viện nấu ăn, hiển thị chi tiết văn hóa ẩm thực Việt - Hàn - Fusion và cho phép trả phí học mở khóa công thức.
   - Danh mục mở rộng lên 8 món: Phở Bò Tái, Bánh Mì Thịt Nướng, Tteokbokki Cay (mở mặc định); K-Bánh Mì Bulgogi, Phở Kim Chi Bulgogi, Tteokbokki Cung Đình, Bánh Mì Thập Cẩm Giao Hòa, Mì Xào Kim Chi Thịt Heo (mở qua học nấu ăn).
+
+- Hệ thống màu sắc khay nguyên liệu (Category-based Color Palette): Màu nền ô nguyên liệu được cấu hình Data-driven trực tiếp qua trường `slotBackgroundColor` trong `IngredientSO` theo nhóm dinh dưỡng/ẩm thực (Rau củ: xanh lá tươi `#2E7D32`, Bánh mì: vàng hổ phách `#C27D28`, Bánh phở/gạo: xám bạc khói `#4A5568`, Thịt heo: hồng tươi `#8C3B4A`, Thịt bò: đỏ nâu steak `#6B2D2B`, Sốt cay: đỏ ớt `#A83226`, Nước tương: nâu sô-cô-la `#3E2723`, Thùng rác: đỏ cờ `#C72929`), tự động đồng bộ cả trong Scene View (`OnValidate`) và Runtime (`Awake`).
 
 ## Ngõ cụt / không làm
 - Không dùng Legacy Text (`UnityEngine.UI.Text`), toàn bộ chuyển sang TextMeshPro (`TextMeshProUGUI`).

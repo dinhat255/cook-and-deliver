@@ -15,6 +15,7 @@ namespace CookAndDeliver.Cooking.Data
         public Sprite rawSprite;
         public Sprite cookedSprite;
         public Color cookedTint = Color.white;
+        public Color slotBackgroundColor = new Color(0.24f, 0.2f, 0.18f);
 
         [Header("Heat Processing Timers (Seconds)")]
         public float cookDuration = 3f;
