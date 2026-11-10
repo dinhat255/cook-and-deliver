@@ -29,6 +29,8 @@ namespace CookAndDeliver.Cooking.Presenters
         float spawnTimer;
         bool isPaused;
         bool isSliding;
+        bool autoSpawnEnabled = true;
+        bool patienceDecayEnabled = true;
 
         Vector2[] defaultTicketPositions;
 
@@ -125,42 +127,76 @@ namespace CookAndDeliver.Cooking.Presenters
             isPaused = paused;
         }
 
+        public void SetAutoSpawnEnabled(bool enabled)
+        {
+            autoSpawnEnabled = enabled;
+        }
+
+        public void SetPatienceDecayEnabled(bool enabled)
+        {
+            patienceDecayEnabled = enabled;
+        }
+
+        public bool HasAnyOrders()
+        {
+            for (int i = 0; i < activeOrders.Count; i++)
+            {
+                if (activeOrders[i] != null) return true;
+            }
+            return queuedOrders.Count > 0;
+        }
+
+        public void ClearAllOrders()
+        {
+            activeOrders.Clear();
+            activeOrders.Add(null);
+            activeOrders.Add(null);
+            queuedOrders.Clear();
+            UpdateViews();
+        }
+
         public void Tick(float deltaTime)
         {
             if (isPaused) return;
 
             // Tick patience timers on active orders
-            for (int i = 0; i < activeOrders.Count; i++)
+            if (patienceDecayEnabled)
             {
-                var order = activeOrders[i];
-                if (order == null) continue;
-
-                order.Tick(deltaTime);
-
-                if (order.IsExpired)
+                for (int i = 0; i < activeOrders.Count; i++)
                 {
-                    RemoveOrderWithSlide(order);
-                    orderEventChannel?.RaiseOrderExpired(order);
+                    var order = activeOrders[i];
+                    if (order == null) continue;
+
+                    order.Tick(deltaTime);
+
+                    if (order.IsExpired)
+                    {
+                        RemoveOrderWithSlide(order);
+                        orderEventChannel?.RaiseOrderExpired(order);
+                    }
                 }
             }
 
             // Spawn new orders (active max 2, queue max 8)
-            int activeCount = 0;
-            for (int i = 0; i < activeOrders.Count; i++)
+            if (autoSpawnEnabled)
             {
-                if (activeOrders[i] != null) activeCount++;
-            }
+                int activeCount = 0;
+                for (int i = 0; i < activeOrders.Count; i++)
+                {
+                    if (activeOrders[i] != null) activeCount++;
+                }
 
-            int maxTotal = 8;
-            spawnTimer -= deltaTime;
-            if (spawnTimer <= 0f && (activeCount + queuedOrders.Count) < maxTotal)
-            {
-                float shipChance = config != null ? config.shipOrderProbability : 0.4f;
-                SpawnOrder(Random.value < shipChance);
+                int maxTotal = 8;
+                spawnTimer -= deltaTime;
+                if (spawnTimer <= 0f && (activeCount + queuedOrders.Count) < maxTotal)
+                {
+                    float shipChance = config != null ? config.shipOrderProbability : 0.4f;
+                    SpawnOrder(Random.value < shipChance);
 
-                float minInterval = config != null ? config.orderSpawnIntervalMin : 7f;
-                float maxInterval = config != null ? config.orderSpawnIntervalMax : 11f;
-                spawnTimer = Random.Range(minInterval, maxInterval);
+                    float minInterval = config != null ? config.orderSpawnIntervalMin : 7f;
+                    float maxInterval = config != null ? config.orderSpawnIntervalMax : 11f;
+                    spawnTimer = Random.Range(minInterval, maxInterval);
+                }
             }
 
             UpdatePatienceBars();
@@ -173,14 +209,26 @@ namespace CookAndDeliver.Cooking.Presenters
             var recipe = recipeDatabase.GetRandomUnlockedRecipe(progression);
             if (recipe == null) return;
 
-            float patience = config != null ? config.orderPatienceDuration : 60f;
+            SpawnSpecificOrder(recipe, isShip);
+        }
+
+        public OrderModel SpawnSpecificOrder(RecipeSO recipe, bool isShip, int preferredLane = -1, float customPatience = -1f)
+        {
+            if (recipe == null) return null;
+
+            float patience = customPatience > 0f
+                ? customPatience
+                : (config != null ? config.orderPatienceDuration : 60f);
             var order = new OrderModel(recipe, isShip, patience);
 
             while (activeOrders.Count < 2) activeOrders.Add(null);
 
-            // Find first empty active slot: 0 (Left lane) or 1 (Right lane)
             int targetSlot = -1;
-            if (activeOrders[0] == null) targetSlot = 0;
+            if (preferredLane >= 0 && preferredLane < 2 && activeOrders[preferredLane] == null)
+            {
+                targetSlot = preferredLane;
+            }
+            else if (activeOrders[0] == null) targetSlot = 0;
             else if (activeOrders[1] == null) targetSlot = 1;
 
             if (targetSlot != -1)
@@ -196,6 +244,7 @@ namespace CookAndDeliver.Cooking.Presenters
 
             orderEventChannel?.RaiseOrderSpawned(order);
             UpdateViews();
+            return order;
         }
 
         public void RemoveOrder(OrderModel order)
@@ -315,7 +364,7 @@ namespace CookAndDeliver.Cooking.Presenters
                 if (view == null) continue;
 
                 var order = (i < activeOrders.Count) ? activeOrders[i] : null;
-                if (view.BoundOrder != order)
+                if (view.BoundOrder != order || (order == null && view.gameObject.activeSelf))
                 {
                     view.BindOrder(order);
                 }

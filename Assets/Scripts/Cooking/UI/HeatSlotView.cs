@@ -28,12 +28,14 @@ namespace CookAndDeliver.Cooking.UI
 
         public Action<Vector3, Color> OnEmitPuff;
         public Action<HeatSlotView> OnCookPerfect;
+        public Action<HeatSlotView, HeatSlotState> OnStateChanged;
 
         float timer;
         float puffTimer;
         float cookDuration;
         float warnDuration;
         float burnDuration;
+        bool externalBurnDisabled;
 
         static readonly Color ProgressGreen = new Color(0.3f, 0.85f, 0.35f);
         static readonly Color ProgressGold = new Color(1f, 0.82f, 0.2f);
@@ -93,6 +95,11 @@ namespace CookAndDeliver.Cooking.UI
             if (progressBarBackground != null) progressBarBackground.gameObject.SetActive(false);
         }
 
+        public void SetExternalBurnDisabled(bool disabled)
+        {
+            externalBurnDisabled = disabled;
+        }
+
         public void Tick(float deltaTime)
         {
             if (CurrentState == HeatSlotState.Idle || CurrentIngredient == null) return;
@@ -100,7 +107,7 @@ namespace CookAndDeliver.Cooking.UI
             timer += deltaTime;
             var prevState = CurrentState;
 
-            bool canBurn = allowBurn && CurrentIngredient.canBurn;
+            bool canBurn = allowBurn && !externalBurnDisabled && CurrentIngredient.canBurn;
             float activeWarn = canBurn ? warnDuration : float.PositiveInfinity;
             float activeBurn = canBurn ? burnDuration : float.PositiveInfinity;
 
@@ -111,6 +118,10 @@ namespace CookAndDeliver.Cooking.UI
 
             bool stateChanged = prevState != CurrentState;
             UpdateVisuals(stateChanged, activeWarn, activeBurn);
+            if (stateChanged)
+            {
+                OnStateChanged?.Invoke(this, CurrentState);
+            }
 
             // Emit smoke puff particles
             puffTimer -= deltaTime;

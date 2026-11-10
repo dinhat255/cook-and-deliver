@@ -110,15 +110,48 @@ namespace CookAndDeliver.Cooking.Presenters
             DeliveryController.PendingOrderCount = 0;
         }
 
+        public void ResetAllBoards()
+        {
+            if (boards == null) return;
+            foreach (var board in boards)
+            {
+                if (board != null)
+                {
+                    board.ResetBoard();
+                }
+            }
+        }
+
         public void SetActiveBoard(BoardView board)
         {
             activeBoard = board;
             if (boards == null) return;
-            foreach (var b in boards)
+            int activeIndex = -1;
+            for (int i = 0; i < boards.Length; i++)
             {
-                if (b != null) b.SetHighlight(b == board);
+                var b = boards[i];
+                if (b != null)
+                {
+                    bool isMatch = b == board;
+                    b.SetHighlight(isMatch);
+                    if (isMatch) activeIndex = i;
+                }
             }
             OnActiveBoardChanged?.Invoke(activeBoard);
+            if (activeIndex >= 0)
+            {
+                workstationEventChannel?.RaiseBoardSelected(activeIndex);
+            }
+        }
+
+        public void NotifyIngredientAdded(BoardView board, IngredientSO ingredient)
+        {
+            if (board == null || ingredient == null) return;
+            board.HaveCounts.TryGetValue(ingredient.id, out int currentCount);
+            int requiredCount = board.CurrentOrder != null && board.CurrentOrder.Recipe != null
+                ? board.CurrentOrder.Recipe.GetRequiredAmount(ingredient)
+                : 0;
+            workstationEventChannel?.RaiseIngredientAdded(board.isDeliveryBoard, ingredient, currentCount, requiredCount);
         }
 
         public bool IsOrderAssigned(OrderModel order)
@@ -247,6 +280,7 @@ namespace CookAndDeliver.Cooking.Presenters
             var buttonPos = board.actionButtonRect.position;
 
             workstationEventChannel?.RaiseDishCompleted(board.isDeliveryBoard, recipe, dishPos);
+            workstationEventChannel?.RaiseDishServed(board.isDeliveryBoard, recipe);
             board.ResetBoard();
 
             OnDishServed?.Invoke(sprite, dishPos);
@@ -263,7 +297,7 @@ namespace CookAndDeliver.Cooking.Presenters
 
             CookingServiceLocator.Get<IAudioService>()?.PlaySound(CookingSound.Pack);
 
-            if (board.isDeliveryBoard)
+            if (order.IsShipOrder)
             {
                 CookingSession.AddCookedDeliveryOrder(recipe.id, recipe.recipeName, recipe.basePrice);
                 DeliveryController.PendingOrderCount = CookingSession.CookedDeliveryOrders.Count;

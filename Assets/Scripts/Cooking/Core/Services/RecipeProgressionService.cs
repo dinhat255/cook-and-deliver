@@ -11,12 +11,10 @@ namespace CookAndDeliver.Cooking.Core.Services
     // Implementation of IRecipeProgressionService managing persistent recipe mastery and learning
     public class RecipeProgressionService : MonoBehaviour, IRecipeProgressionService
     {
-        public const string GameProgressSaveKey = "GameProgress";
+        public const string GameProgressSaveKey = GameProgressStore.SaveKey;
         private const string LegacyPlayerPrefsPrefix = "RECIPE_UNLOCKED_";
 
         public event Action<RecipeSO> OnRecipeUnlocked;
-
-        private GameProgressSLO _progress;
 
         void Awake()
         {
@@ -31,28 +29,12 @@ namespace CookAndDeliver.Cooking.Core.Services
 
         private async UniTaskVoid LoadProgressAsync()
         {
-            try
-            {
-                _progress = await SaveLoadManager.LoadAsync<GameProgressSLO>(GameProgressSaveKey);
-                if (_progress == null)
-                {
-                    _progress = new GameProgressSLO();
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning($"[RecipeProgressionService] Failed to load GameProgress: {ex.Message}");
-                _progress = new GameProgressSLO();
-            }
+            await GameProgressStore.EnsureLoadedAsync();
         }
 
         private GameProgressSLO GetOrEnsureProgress()
         {
-            if (_progress == null)
-            {
-                _progress = new GameProgressSLO();
-            }
-            return _progress;
+            return GameProgressStore.Progress;
         }
 
         public bool IsRecipeUnlocked(RecipeSO recipe)
@@ -103,9 +85,10 @@ namespace CookAndDeliver.Cooking.Core.Services
 
             var progress = GetOrEnsureProgress();
             progress.UnlockRecipe(recipe.id);
+            progress.TotalCoins = currentCoins;
 
-            // Save via SaveLoadManager
-            SaveLoadManager.SaveAsync(GameProgressSaveKey, progress).Forget();
+            // Save via centralized GameProgressStore
+            GameProgressStore.SaveAsync().Forget();
 
             // Maintain legacy PlayerPrefs sync for compatibility
             PlayerPrefs.SetInt(LegacyPlayerPrefsPrefix + recipe.id, 1);
@@ -151,8 +134,7 @@ namespace CookAndDeliver.Cooking.Core.Services
 
         public void ResetProgression()
         {
-            _progress = new GameProgressSLO();
-            SaveLoadManager.SaveAsync(GameProgressSaveKey, _progress).Forget();
+            GameProgressStore.ResetAll();
 
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();

@@ -22,7 +22,7 @@ MonoBehaviour:
   chefTip: "N\u01B0\u1EDBng th\u1ECBt heo x\xE9m c\u1EA1nh tr\u01B0\u1EDBc khi tr\u1ED9n c\xF9ng m\xEC v\xE0 kim chi \u0111\u1EC3 b\u1EADt d\u1EADy m\xF9i kh\xF3i than hoa"
   isUnlockedByDefault: 0
   unlockCostCoins: 220
-  finishedDishSprite: {fileID: 21300000, guid: 8e270857afc85ee8b166bc291a18c392, type: 3}
+  finishedDishSprite: {fileID: 8995211142543142478, guid: ca37d8ffc6b17784ba3c2f474a0fa05f, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}
     requiredAmount: 1

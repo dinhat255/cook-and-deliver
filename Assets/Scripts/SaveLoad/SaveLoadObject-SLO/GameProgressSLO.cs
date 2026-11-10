@@ -11,6 +11,9 @@ namespace CookAndDeliver.SaveLoad.Objects
         [SerializeField] private int _totalCoins = 0;
         [SerializeField] private int _highestCombo = 0;
         [SerializeField] private int _totalOrdersCompleted = 0;
+        [SerializeField] private int _currentDay = 1;
+        [SerializeField] private bool _isCookingTutorialCompleted = false;
+        [SerializeField] private bool _isDeliveryTutorialCompleted = false;
         [SerializeField] private List<string> _unlockedRecipeIds = new List<string>();
 
         public int TotalCoins
@@ -31,6 +34,24 @@ namespace CookAndDeliver.SaveLoad.Objects
             set => _totalOrdersCompleted = Mathf.Max(0, value);
         }
 
+        public int CurrentDay
+        {
+            get => _currentDay;
+            set => _currentDay = Mathf.Max(1, value);
+        }
+
+        public bool IsCookingTutorialCompleted
+        {
+            get => _isCookingTutorialCompleted;
+            set => _isCookingTutorialCompleted = value;
+        }
+
+        public bool IsDeliveryTutorialCompleted
+        {
+            get => _isDeliveryTutorialCompleted;
+            set => _isDeliveryTutorialCompleted = value;
+        }
+
         public IReadOnlyList<string> UnlockedRecipeIds => _unlockedRecipeIds;
 
         public GameProgressSLO()
@@ -38,6 +59,9 @@ namespace CookAndDeliver.SaveLoad.Objects
             _totalCoins = 0;
             _highestCombo = 0;
             _totalOrdersCompleted = 0;
+            _currentDay = 1;
+            _isCookingTutorialCompleted = false;
+            _isDeliveryTutorialCompleted = false;
             _unlockedRecipeIds = new List<string>();
         }
 

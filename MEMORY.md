@@ -13,7 +13,7 @@
   3. `BottomZone` (Bottom-Stretch, cao 400px): Chứa `ZoneTray` mat, `TrayLine`, `TrayButtonView` (Tray 6x2).
   4. `FlyLayer`: Nằm trong `GameFrame9x16` (0,0 đến 1,1) để tọa độ bay parabol `InverseTransformPoint` đồng nhất 1-1 với thớt và khay.
   5. `ShipFullOverlay`, `OrderQueuePopup`, `CulinaryCodexPopup`: Giữ ở cấp Canvas ngoài cùng để dimmer làm mờ toàn bộ màn hình khi mở modal.
-- Asset pixel art: 100% 11 IngredientSO và 8 RecipeSO sử dụng bộ sprite custom tách nền trong suốt tại `Assets/Art/Cooking/Food/CustomPixel/` (các biến thể phụ lưu tại `CustomPixel/Variants/`). Hạn chế asset: không vẽ sprite trạng thái trung gian.
+- Asset pixel art: 100% 11 IngredientSO và 8 RecipeSO sử dụng bộ sprite tinh chỉnh sạch viền tại `Assets/Art/Cooking/clean/`. Hạn chế asset: không vẽ sprite trạng thái trung gian.
 - Người dùng phụ trách phần Cooking. Phần Delivery do người khác làm (scene `Delivery`).
 
 ## Quyết định kiến trúc (phần Cooking)
@@ -80,6 +80,11 @@
   - Popup tổng kết ca (DaySummaryPopupView): Modal hóa đơn (Daily Receipt) nằm ngay trong `CookingCanvas` của `Cooking.unity`. Hiển thị chi tiết doanh thu đơn tại bàn, đơn ship, phí bồi thường, lãi ròng và sao đánh giá. Cho phép mở Sổ tay ẩm thực học món mới hoặc bấm "Mở cửa ngày mới" để bắt đầu ca tiếp theo ngay tại chỗ (zero-loading).
   - Tuân thủ Unity MCP: Toàn bộ việc quản lý, chỉnh sửa Scene, Component và GameObjects được thực hiện trực tiếp qua các công cụ Unity MCP, không duy trì script Editor trung gian trong mã nguồn dự án.
   - Hệ thống chuyển cảnh mượt (SceneLoader): `SceneLoader.unity` (Build Index 3) làm scene Additive trung gian. `LoadSceneHandler` hỗ trợ nạp scene qua cả build index lẫn tên scene (`ResolveBuildIndex`), loại bỏ lỗi index -1. `FadeableLoader` dùng UniTask và DOTween độc lập timescale (`SetUpdate(true)`), tự động bật `raycastTarget` ngăn chạm nút lúc chuyển cảnh, màu fader chuẩn tông ấm `#141211`. Toàn bộ chuyển scene giữa MainMenu, Cooking và Delivery đều qua `LoadSceneHandler.LoadSceneByName`.
+- Hệ thống Tutorial ngày 1 tách rời gameplay (Decoupled Day 1 Tutorial) và công cụ test Save/Load:
+  - Lưu trữ thống nhất trong `GameProgressSLO` qua `GameProgressStore`: bổ sung `CurrentDay`, `IsCookingTutorialCompleted`, `IsDeliveryTutorialCompleted` (đồng bộ với `DeliveryProgressStore` ở Delivery qua static hooks trên `DeliveryController`).
+  - Phần Cooking (`CookAndDeliver.Cooking.Tutorial`): điều phối bằng `CookingTutorialDirector` + `Day1CookingTutorial.asset` (`TutorialSequenceSO`, 13 bước + 3 mẹo mềm ngày 1), dùng `TutorialAnchor` / `TutorialAnchorRegistry`, `TutorialSpotlightMask` và `CookingTutorialOverlayView` (`FloatingLayer` Sub-Canvas `sortingOrder = 50`). Với bước `BoardIngredientCount` nhắm nhiều bếp (`station.*`), `ResolveStepTargets` lọc động các slot còn nguyên liệu (`MatchesSlotTransform` kiểm tra cả child `"Hit"`) ưu tiên `Perfect`/`Warning` và `CookingMasterPresenter` luôn dọn qua `ClearHeatSlot`. `BoardDine` mang `isDeliveryBoard = false` (`RA MÓN`) tách biệt `BoardShip` (`ĐÓNG HỘP`), `OrderPresenter.UpdateViews` ẩn cả placeholder scene khi `order == null`.
+  - Phần Delivery (`CookAndDeliver.Delivery.DeliveryTutorialController`): lắng nghe `DeliverySimulation` + `SwipeInput`, dùng seam `SetSimulationFrozen` hướng dẫn 2 bước né chướng ngại vật và đổi làn vào vạch vàng giao hàng.
+  - Công cụ kiểm thử Editor (`TutorialSaveDebugEditor`): menu `Tools/Tutorial/Reset All Save Data (Test Tutorial)`, `Reset Tutorial Flags Only (Day 1)`, `Show Dev Skip Controls` (mặc định tắt, lưu `EditorPrefs` key `CookAndDeliver.Dev.ShowTutorialSkipControls`, ẩn hoàn toàn nút `Bỏ qua bước`, `Qua Ngày 2` và `Bỏ qua` Delivery khi tắt hoặc trong bản build), và `Open Save & Tutorial Debugger`.
 
 ## Ngõ cụt / không làm
 - Không dùng Legacy Text (`UnityEngine.UI.Text`), toàn bộ chuyển sang TextMeshPro (`TextMeshProUGUI`).

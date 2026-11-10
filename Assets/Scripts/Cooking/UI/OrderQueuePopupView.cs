@@ -28,6 +28,7 @@ namespace CookAndDeliver.Cooking.UI
         void Awake()
         {
             if (panelRoot != null) panelRoot.SetActive(false);
+            if (backdropButton != null) backdropButton.gameObject.SetActive(false);
 
             if (closeButton != null)
                 closeButton.onClick.AddListener(Close);
@@ -55,6 +56,11 @@ namespace CookAndDeliver.Cooking.UI
 
         public void Open()
         {
+            if (backdropButton != null)
+            {
+                backdropButton.gameObject.SetActive(true);
+            }
+
             if (panelRoot != null)
             {
                 panelRoot.SetActive(true);
@@ -64,6 +70,11 @@ namespace CookAndDeliver.Cooking.UI
 
         public void Close()
         {
+            if (backdropButton != null)
+            {
+                backdropButton.gameObject.SetActive(false);
+            }
+
             if (panelRoot != null)
             {
                 panelRoot.SetActive(false);
@@ -96,6 +107,7 @@ namespace CookAndDeliver.Cooking.UI
             if (queueItemPrefab != null)
             {
                 var rowGo = Instantiate(queueItemPrefab, itemsContainer);
+                rowGo.SetActive(true);
                 var text = rowGo.GetComponentInChildren<TextMeshProUGUI>();
                 if (text != null)
                 {

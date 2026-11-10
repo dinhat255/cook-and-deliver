@@ -21,8 +21,12 @@ namespace CookAndDeliver.Delivery
         public static Func<DeliveryRunRequest> ExternalRequestProvider;
         public static Action<DeliveryRunResult> OnExternalRunCompleted;
         public static Action OnExternalReturnRequested;
+        public static Func<bool> ExternalIsTutorialCompleted;
+        public static Action ExternalOnTutorialCompleted;
         public static string ExternalReturnButtonLabel = "Về quán";
         public static int PendingOrderCount = 0;
+
+        public bool IsSimulationFrozen { get; private set; }
 
         private float hudTime;
         private ScreenOrientation previousOrientation;
@@ -68,6 +72,7 @@ namespace CookAndDeliver.Delivery
 
         public void StartRun(DeliveryRunRequest request)
         {
+            IsSimulationFrozen = false;
             input.Cancel();
             world.ResetView();
             hudTime = 0;
@@ -118,12 +123,23 @@ namespace CookAndDeliver.Delivery
             }
         }
 
-        public void RequestLaneChange(int direction) { Simulation.RequestLaneChange(direction); }
-        public void Pause() { input.Cancel(); Simulation.Pause(); Play(tapClip); }
-        public void Resume() { input.Cancel(); Simulation.Resume(); Play(tapClip); }
+        public void SetSimulationFrozen(bool frozen)
+        {
+            IsSimulationFrozen = frozen;
+            input.Cancel();
+        }
+
+        public void RequestLaneChange(int direction)
+        {
+            if (IsSimulationFrozen) return;
+            Simulation.RequestLaneChange(direction);
+        }
+        public void Pause() { IsSimulationFrozen = false; input.Cancel(); Simulation.Pause(); Play(tapClip); }
+        public void Resume() { IsSimulationFrozen = false; input.Cancel(); Simulation.Resume(); Play(tapClip); }
 
         public void AbortRun()
         {
+            IsSimulationFrozen = false;
             input.Cancel();
             Simulation.AbortRun();
             world.ResetView();
@@ -135,8 +151,15 @@ namespace CookAndDeliver.Delivery
         private void Update()
         {
             var dt = Mathf.Min(Time.unscaledDeltaTime, .1f);
-            Simulation.Tick(dt);
-            world.Render(Simulation, dt, Simulation.InterpolationAlpha);
+            if (!IsSimulationFrozen)
+            {
+                Simulation.Tick(dt);
+                world.Render(Simulation, dt, Simulation.InterpolationAlpha);
+            }
+            else
+            {
+                world.Render(Simulation, 0f, Simulation.InterpolationAlpha);
+            }
             hudTime -= dt;
             if (hudTime <= 0) { ui.Render(Simulation); hudTime = .1f; }
             if (Simulation.State == DeliveryState.Running) ui.Tick(dt);

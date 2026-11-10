@@ -35,13 +35,46 @@ namespace CookAndDeliver.Cooking.UI
                 ? new Color(0.78f, 0.16f, 0.16f)
                 : (boundIngredient != null ? boundIngredient.slotBackgroundColor : new Color(0.24f, 0.2f, 0.18f));
 
-            if (backgroundImage != null)
+            if (isTrashButton)
+            {
+                if (iconImage != null && iconImage.enabled)
+                {
+                    iconImage.enabled = false;
+                }
+
+                if (labelText != null && labelText.text != "Thùng rác")
+                {
+                    labelText.text = "Thùng rác";
+                }
+            }
+            else if (boundIngredient != null)
+            {
+                if (iconImage != null)
+                {
+                    if (!iconImage.enabled)
+                    {
+                        iconImage.enabled = true;
+                    }
+
+                    if (iconImage.sprite != boundIngredient.rawSprite)
+                    {
+                        iconImage.sprite = boundIngredient.rawSprite;
+                    }
+                }
+
+                if (labelText != null && labelText.text != boundIngredient.displayName)
+                {
+                    labelText.text = boundIngredient.displayName;
+                }
+            }
+
+            if (backgroundImage != null && backgroundImage.color != targetColor)
             {
                 backgroundImage.color = targetColor;
             }
 
             var inner = innerBackgroundImage != null ? innerBackgroundImage : transform.Find("Bg/Bg (1)")?.GetComponent<Image>();
-            if (inner != null)
+            if (inner != null && inner.color != targetColor)
             {
                 inner.color = targetColor;
             }

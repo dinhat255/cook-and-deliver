@@ -39,6 +39,7 @@ namespace CookAndDeliver.Cooking.Presenters
                 {
                     var model = new HeatSlotModel($"Grill_{i}", 3f, 6f, 8f, true);
                     slots.Add((model, grillViews[i]));
+                    BindSlotEvents(grillViews[i]);
                 }
             }
 
@@ -47,6 +48,7 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 var model = new HeatSlotModel("Oven", 2f, 0f, 0f, false);
                 slots.Add((model, ovenView));
+                BindSlotEvents(ovenView);
             }
 
             // Pan slot
@@ -54,6 +56,39 @@ namespace CookAndDeliver.Cooking.Presenters
             {
                 var model = new HeatSlotModel("Pan", 2.5f, 4.5f, 6f, true);
                 slots.Add((model, panView));
+                BindSlotEvents(panView);
+            }
+        }
+
+        void BindSlotEvents(HeatSlotView view)
+        {
+            if (view == null) return;
+            view.OnStateChanged += HandleSlotStateChanged;
+        }
+
+        void OnDestroy()
+        {
+            foreach (var (_, view) in slots)
+            {
+                if (view != null) view.OnStateChanged -= HandleSlotStateChanged;
+            }
+        }
+
+        void HandleSlotStateChanged(HeatSlotView view, HeatSlotState state)
+        {
+            if (view == null) return;
+            stationEventChannel?.RaiseSlotStateChanged(view.name, view.CurrentIngredient, state);
+            if (state == HeatSlotState.Burnt)
+            {
+                stationEventChannel?.RaiseSlotBurnt(view.name, view.IconWorldPos, 0);
+            }
+        }
+
+        public void SetBurnEnabled(bool enabled)
+        {
+            foreach (var (_, view) in slots)
+            {
+                if (view != null) view.SetExternalBurnDisabled(!enabled);
             }
         }
 
@@ -100,6 +135,18 @@ namespace CookAndDeliver.Cooking.Presenters
             if (slotView == null) return;
             slotView.ClearSlot();
             stationEventChannel?.RaiseSlotStateChanged(slotView.name, null, HeatSlotState.Idle);
+        }
+
+        public void ClearAllSlots()
+        {
+            foreach (var (_, view) in slots)
+            {
+                if (view != null)
+                {
+                    view.ClearSlot();
+                    stationEventChannel?.RaiseSlotStateChanged(view.name, null, HeatSlotState.Idle);
+                }
+            }
         }
     }
 }

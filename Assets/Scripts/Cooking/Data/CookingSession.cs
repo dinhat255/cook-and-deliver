@@ -48,6 +48,11 @@ namespace CookAndDeliver.Cooking.Data
         public static int LastDeliveryTotalOrders { get; set; }
         public static bool LastDeliveryCargoLost { get; set; }
 
+        public static void ResetSessionForTest()
+        {
+            ResetSession();
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetSession()
         {
@@ -130,6 +135,7 @@ namespace CookAndDeliver.Cooking.Data
             Coins = Mathf.Max(0, Coins + netCoins);
             DayDeliveryCompleted += result.DeliveredCount;
             HasDeliveryResult = true;
+            GameProgressStore.SyncFromSession();
         }
 
         public static void AdvanceToNextDay()
@@ -138,6 +144,7 @@ namespace CookAndDeliver.Cooking.Data
             DayDineInCompleted = 0;
             DayDeliveryCompleted = 0;
             ClearDeliveryOrders();
+            GameProgressStore.SyncFromSession();
         }
     }
 }

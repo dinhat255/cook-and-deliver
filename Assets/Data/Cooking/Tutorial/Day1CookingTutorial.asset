@@ -1,0 +1,274 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7301d6beb326294f83b95f44467e4bb, type: 3}
+  m_Name: Day1CookingTutorial
+  m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Tutorial.TutorialSequenceSO
+  steps:
+  - stepId: banh_mi_bread
+    instructionText: "\u0110\u01A1n t\u1EA1i b\xE0n \u0111\u1EA7u ti\xEAn: B\xE1nh
+      M\xEC Th\u1ECBt N\u01B0\u1EDBng! Ch\u1EA1m V\u1ECF b\xE1nh m\xEC \u0111\u1EC3
+      n\u01B0\u1EDBng gi\xF2n trong L\xF2 \xE9p."
+    targetAnchorIds:
+    - tray.bread
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 1
+    orderToSpawn: {fileID: 11400000, guid: 88e011c823cb2114a8b37091ef4644b1, type: 2}
+    orderIsShip: 0
+    orderPreferredLane: 0
+    completionRule: 0
+    targetBoardIndex: 0
+    ingredientGoals:
+    - ingredientId: bread
+      requiredAmount: 1
+  - stepId: banh_mi_pork
+    instructionText: "M\xF3n n\xE0y c\u1EA7n 3 ph\u1EA7n Th\u1ECBt heo n\u01B0\u1EDBng.
+      Ch\u1EA1m Th\u1ECBt heo 3 l\u1EA7n \u0111\u1EC3 l\u1EA5p \u0111\u1EA7y 3 \xF4
+      tr\xEAn V\u1EC9 n\u01B0\u1EDBng!"
+    targetAnchorIds:
+    - tray.pork
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 0
+    targetBoardIndex: 0
+    ingredientGoals:
+    - ingredientId: pork
+      requiredAmount: 3
+  - stepId: banh_mi_collect_heat
+    instructionText: "\u0110\u1EE3i v\u1ECF b\xE1nh m\xEC v\xE0 3 xi\xEAn th\u1ECBt
+      ch\xEDn v\xE0ng, r\u1ED3i ch\u1EA1m L\xF2 \xE9p v\xE0 V\u1EC9 n\u01B0\u1EDBng
+      \u0111\u1EC3 gom l\xEAn Th\u1EDBt T\u1EA1i B\xE0n."
+    targetAnchorIds:
+    - station.oven
+    - station.grill.0
+    - station.grill.1
+    - station.grill.2
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 0
+    ingredientGoals:
+    - ingredientId: bread
+      requiredAmount: 1
+    - ingredientId: pork
+      requiredAmount: 3
+  - stepId: banh_mi_herb
+    instructionText: "Th\xEAm nguy\xEAn li\u1EC7u t\u01B0\u01A1i tr\u1EF1c ti\u1EBFp:
+      ch\u1EA1m Rau th\u01A1m 2 l\u1EA7n \u0111\u1EC3 r\u1EAFc l\xEAn th\u1EDBt."
+    targetAnchorIds:
+    - tray.herb
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 0
+    ingredientGoals:
+    - ingredientId: herb
+      requiredAmount: 2
+  - stepId: banh_mi_soy
+    instructionText: "Ch\u1EA1m N\u01B0\u1EDBc t\u01B0\u01A1ng 1 l\u1EA7n \u0111\u1EC3
+      ho\xE0n t\u1EA5t chi\u1EBFc B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng!"
+    targetAnchorIds:
+    - tray.soy
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 0
+    ingredientGoals:
+    - ingredientId: soy
+      requiredAmount: 1
+  - stepId: banh_mi_serve
+    instructionText: "M\xF3n \u0111\xE3 \u0111\u1EE7! Ch\u1EA1m n\xFAt RA M\xD3N
+      m\xE0u xanh \u0111\u1EC3 ph\u1EE5c v\u1EE5 kh\xE1ch v\xE0 nh\u1EADn xu."
+    targetAnchorIds:
+    - board.0.action
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 4
+    targetBoardIndex: 0
+    ingredientGoals: []
+  - stepId: pho_select_ship_lane
+    instructionText: "V\xE9 cam b\xEAn ph\u1EA3i l\xE0 \u0111\u01A1n Giao Ship. Ch\u1EA1m
+      Th\u1EDBt Giao Ship ho\u1EB7c V\xE9 cam \u0111\u1EC3 l\xE0m m\xF3n Ph\u1EDF
+      B\xF2 T\xE1i!"
+    targetAnchorIds:
+    - board.1.select
+    - ticket.1
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 1
+    orderToSpawn: {fileID: 11400000, guid: 04ebbe4ad0d32fe498eb98dcf98a9c94, type: 2}
+    orderIsShip: 1
+    orderPreferredLane: 1
+    completionRule: 2
+    targetBoardIndex: 1
+    ingredientGoals: []
+  - stepId: pho_noodle
+    instructionText: "V\u1EDBi m\xF3n Ph\u1EDF, lu\xF4n cho B\xE1nh ph\u1EDF v\xE0o
+      t\xF4 tr\u01B0\u1EDBc khi chan n\u01B0\u1EDBc l\xE8o. Ch\u1EA1m B\xE1nh ph\u1EDF
+      1 l\u1EA7n!"
+    targetAnchorIds:
+    - tray.noodle
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 1
+    ingredientGoals:
+    - ingredientId: noodle
+      requiredAmount: 1
+  - stepId: pho_broth
+    instructionText: "N\u1ED3i n\u01B0\u1EDBc l\xE8o \u0111ang rung g\u1EE3i \xFD!
+      Ch\u1EA1m v\xE0o N\u1ED3i \u0111\u1EC3 chan 1 v\xE1 n\u01B0\u1EDBc d\xF9ng
+      l\xEAn t\xF4 Ph\u1EDF."
+    targetAnchorIds:
+    - station.pot
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 1
+    ingredientGoals:
+    - ingredientId: broth
+      requiredAmount: 1
+  - stepId: pho_beef
+    instructionText: "Ch\u1EA1m Th\u1ECBt b\xF2 2 l\u1EA7n \u0111\u1EC3 n\u01B0\u1EDBng
+      ch\xEDn t\xE1i tr\xEAn V\u1EC9 n\u01B0\u1EDBng!"
+    targetAnchorIds:
+    - tray.beef
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 0
+    targetBoardIndex: 1
+    ingredientGoals:
+    - ingredientId: beef
+      requiredAmount: 2
+  - stepId: pho_collect_beef
+    instructionText: "Th\u1ECBt b\xF2 ch\xEDn r\u1ED3i! Ch\u1EA1m v\xE0o c\xE1c \xF4
+      V\u1EC9 n\u01B0\u1EDBng \u0111\u1EC3 g\u1EAFp 2 ph\u1EA7n th\u1ECBt v\xE0o
+      t\xF4 Ph\u1EDF."
+    targetAnchorIds:
+    - station.grill.0
+    - station.grill.1
+    - station.grill.2
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 1
+    ingredientGoals:
+    - ingredientId: beef
+      requiredAmount: 2
+  - stepId: pho_scallion
+    instructionText: "Th\xEAm 2 ph\u1EA7n H\xE0nh l\xE1 t\u01B0\u01A1i t\u1EEB khay
+      nguy\xEAn li\u1EC7u \u0111\u1EC3 d\u1EADy m\xF9i t\xF4 Ph\u1EDF."
+    targetAnchorIds:
+    - tray.scallion
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 0
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 1
+    targetBoardIndex: 1
+    ingredientGoals:
+    - ingredientId: scallion
+      requiredAmount: 2
+  - stepId: pho_pack
+    instructionText: "Ch\u1EA1m \u0110\xD3NG H\u1ED8P \u0111\u1EC3 ho\xE0n th\xE0nh
+      h\u1ED9p ship \u0111\u1EA7u ti\xEAn! \u0110\u1EE7 3 h\u1ED9p ship b\u1EA1n
+      s\u1EBD ch\u1EA1y giao h\xE0ng."
+    targetAnchorIds:
+    - board.1.action
+    blockOutsideInputs: 1
+    showSpotlight: 1
+    showHandPointer: 1
+    tooltipPlacement: 3
+    spawnOrderBeforeStep: 0
+    orderToSpawn: {fileID: 0}
+    orderIsShip: 0
+    orderPreferredLane: -1
+    completionRule: 4
+    targetBoardIndex: 1
+    ingredientGoals: []
+  postTutorialStarterRecipe: {fileID: 11400000, guid: 7a4cde187221d5645bd5b07c563748ac, type: 2}
+  panHintRecipe: {fileID: 11400000, guid: 7a4cde187221d5645bd5b07c563748ac, type: 2}
+  panHintAnchorIds:
+  - tray.rice_cake
+  - station.pan
+  panHintText: "B\xE1nh g\u1EA1o c\u1EA7n x\xE0o tr\xEAn Ch\u1EA3o s\u1ED1t (n\u1EA5u
+    t\u1EEBng ph\u1EA7n m\u1ED9t)!"
+  burntHintAnchorIds:
+  - tray.trash
+  burntHintText: "M\xF3n b\u1ECB ch\xE1y r\u1ED3i! Ch\u1EA1m Th\xF9ng r\xE1c r\u1ED3i
+    ch\u1EA1m v\xE0o b\u1EBFp \u0111\u1EC3 d\u1ECDn s\u1EA1ch."
+  shipOverlayHintAnchorIds:
+  - ship.go
+  shipOverlayHintText: "\u0110\u1EE7 3 h\u1ED9p ship! Ch\u1EA1m \u0110I GIAO H\xC0NG
+    \u0111\u1EC3 l\xEAn \u0111\u01B0\u1EDDng."

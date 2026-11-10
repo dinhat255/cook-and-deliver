@@ -11,6 +11,7 @@ namespace CookAndDeliver.Delivery
     {
         public int version = 1;
         public int totalDelivered;
+        public bool tutorialCompleted;
         public List<DeliveryBestScore> bestScores = new List<DeliveryBestScore>();
         public int BestFor(int count) { return bestScores.Find(x => x.orderCount == count)?.score ?? 0; }
     }
@@ -53,6 +54,20 @@ namespace CookAndDeliver.Delivery
                 else best.score = Math.Max(best.score, result.Score);
                 dirty = true;
             }
+            if (!dirty) return true;
+            return Flush();
+        }
+
+        public bool MarkTutorialCompleted()
+        {
+            if (Data.tutorialCompleted) return true;
+            Data.tutorialCompleted = true;
+            dirty = true;
+            return Flush();
+        }
+
+        private bool Flush()
+        {
             if (!dirty) return true;
             try
             {

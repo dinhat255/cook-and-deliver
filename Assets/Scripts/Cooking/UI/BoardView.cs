@@ -215,6 +215,7 @@ namespace CookAndDeliver.Cooking.UI
 
             if (actionButtonText != null)
             {
+                actionButtonText.text = isShip ? "ĐÓNG HỘP" : "RA MÓN";
                 actionButtonText.color = IsComplete ? Color.white : new Color(1f, 1f, 1f, 0.5f);
             }
         }

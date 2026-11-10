@@ -15,7 +15,7 @@ MonoBehaviour:
   id: soy
   displayName: "N\u01B0\u1EDBc t\u01B0\u01A1ng"
   route: 0
-  rawSprite: {fileID: 21300000, guid: 13aa517dfc3358528f2e9ef838a99e15, type: 3}
+  rawSprite: {fileID: 5226359018525956027, guid: 7af00eb19f886204d9d29052e02ec1a7, type: 3}
   cookedSprite: {fileID: 0}
   cookedTint: {r: 1, g: 1, b: 1, a: 1}
   slotBackgroundColor: {r: 0.243, g: 0.153, b: 0.137, a: 1}

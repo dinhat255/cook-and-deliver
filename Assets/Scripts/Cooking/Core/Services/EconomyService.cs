@@ -53,6 +53,8 @@ namespace CookAndDeliver.Cooking.Core.Services
             CookingSession.Coins += amount;
             CookingSession.CompletedOrdersCount++;
 
+            GameProgressStore.SyncFromSession();
+
             economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, amount);
             economyEventChannel?.RaiseComboUpdated(CookingSession.Combo);
         }
@@ -60,6 +62,7 @@ namespace CookAndDeliver.Cooking.Core.Services
         public void DeductCoins(int penalty)
         {
             CookingSession.Coins = Mathf.Max(0, CookingSession.Coins - penalty);
+            GameProgressStore.SyncFromSession();
             economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, -penalty);
         }
 

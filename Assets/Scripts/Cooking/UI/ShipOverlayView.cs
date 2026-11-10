@@ -17,9 +17,12 @@ namespace CookAndDeliver.Cooking.UI
         public Button deliverButton;
         public Button continueButton;
 
+        public event System.Action<bool> OnVisibilityChanged;
+
         public void Show(bool visible)
         {
             gameObject.SetActive(visible);
+            OnVisibilityChanged?.Invoke(visible);
         }
     }
 }

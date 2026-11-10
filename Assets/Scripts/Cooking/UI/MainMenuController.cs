@@ -1,4 +1,5 @@
 using CookAndDeliver.Cooking.Data;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,8 +28,9 @@ namespace CookAndDeliver.Cooking.UI
             if (quitButton != null) quitButton.onClick.AddListener(OnQuitClicked);
         }
 
-        void Start()
+        async UniTaskVoid Start()
         {
+            await GameProgressStore.EnsureLoadedAsync();
             UpdateUI();
         }
 

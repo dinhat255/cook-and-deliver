@@ -175,8 +175,8 @@ namespace CookAndDeliver.Cooking.UI
             if (imgBg != null)
             {
                 imgBg.color = (recipe == currentSelectedRecipe)
-                    ? new Color(0.24f, 0.32f, 0.44f, 1f)
-                    : (isUnlocked ? new Color(0.14f, 0.16f, 0.20f, 0.95f) : new Color(0.10f, 0.11f, 0.13f, 0.85f));
+                    ? new Color(0.50f, 0.76f, 1.0f, 1f)
+                    : (isUnlocked ? new Color(0.36f, 0.40f, 0.48f, 1f) : new Color(0.22f, 0.24f, 0.28f, 0.90f));
             }
 
             // Configure text components on card
@@ -230,8 +230,8 @@ namespace CookAndDeliver.Cooking.UI
                     bool isSel = (recipe == currentSelectedRecipe);
                     bool isUnl = progression != null ? progression.IsRecipeUnlocked(recipe) : recipe.isUnlockedByDefault;
                     imgBg.color = isSel
-                        ? new Color(0.24f, 0.35f, 0.50f, 1f)
-                        : (isUnl ? new Color(0.14f, 0.16f, 0.20f, 0.95f) : new Color(0.10f, 0.11f, 0.13f, 0.85f));
+                        ? new Color(0.50f, 0.76f, 1.0f, 1f)
+                        : (isUnl ? new Color(0.36f, 0.40f, 0.48f, 1f) : new Color(0.22f, 0.24f, 0.28f, 0.90f));
                 }
             }
         }
