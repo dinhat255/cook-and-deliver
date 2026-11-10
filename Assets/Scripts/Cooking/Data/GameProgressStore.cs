@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CookAndDeliver.SaveLoad.Core;
 using CookAndDeliver.SaveLoad.Objects;
 using Cysharp.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace CookAndDeliver.Cooking.Data
         public const string SaveKey = "GameProgress";
 
         private static GameProgressSLO _cachedProgress;
-        private static UniTask<GameProgressSLO> _loadTask;
+        private static readonly List<UniTaskCompletionSource<GameProgressSLO>> _loadWaiters = new List<UniTaskCompletionSource<GameProgressSLO>>();
         private static bool _isLoaded;
         private static bool _isLoading;
         private static bool _isSaving;
@@ -45,7 +46,7 @@ namespace CookAndDeliver.Cooking.Data
         private static void ResetStaticState()
         {
             _cachedProgress = null;
-            _loadTask = default;
+            _loadWaiters.Clear();
             _isLoaded = false;
             _isLoading = false;
             _isSaving = false;
@@ -61,12 +62,13 @@ namespace CookAndDeliver.Cooking.Data
 
             if (_isLoading)
             {
-                return _loadTask;
+                var waiter = new UniTaskCompletionSource<GameProgressSLO>();
+                _loadWaiters.Add(waiter);
+                return waiter.Task;
             }
 
             _isLoading = true;
-            _loadTask = LoadInternalAsync();
-            return _loadTask;
+            return LoadInternalAsync();
         }
 
         private static async UniTask<GameProgressSLO> LoadInternalAsync()
@@ -94,6 +96,16 @@ namespace CookAndDeliver.Cooking.Data
             finally
             {
                 _isLoading = false;
+                var result = _cachedProgress ?? Progress;
+                if (_loadWaiters.Count > 0)
+                {
+                    var waitersSnapshot = _loadWaiters.ToArray();
+                    _loadWaiters.Clear();
+                    for (int i = 0; i < waitersSnapshot.Length; i++)
+                    {
+                        waitersSnapshot[i].TrySetResult(result);
+                    }
+                }
             }
         }
 

@@ -46,9 +46,9 @@ MonoBehaviour:
   swipeWidthFraction: 0.06
   swipeHorizontalRatio: 1.25
   sampleOrderNames:
-  - "C\u01A1m g\xE0 n\xF3ng"
-  - "B\xE1nh m\xEC gi\xF2n"
-  - "Tr\xE0 s\u1EEFa m\xE1t"
-  - "M\xEC x\xE0o rau"
-  - "B\xE1nh ng\u1ECDt"
+  - "Ph\u1EDF B\xF2 T\xE1i"
+  - "B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng"
+  - Tteokbokki Cay
+  - "K-B\xE1nh M\xEC Bulgogi"
+  - "Tteokbokki Cung \u0110\xECnh"
   baseReward: 100

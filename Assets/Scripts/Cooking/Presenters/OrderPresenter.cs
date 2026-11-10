@@ -152,6 +152,22 @@ namespace CookAndDeliver.Cooking.Presenters
             activeOrders.Add(null);
             activeOrders.Add(null);
             queuedOrders.Clear();
+
+            if (ticketViews != null)
+            {
+                for (int i = 0; i < ticketViews.Length; i++)
+                {
+                    var view = ticketViews[i];
+                    if (view == null) continue;
+                    var rt = (RectTransform)view.transform;
+                    rt.DOKill();
+                    if (defaultTicketPositions != null && i < defaultTicketPositions.Length)
+                    {
+                        rt.anchoredPosition = defaultTicketPositions[i];
+                    }
+                }
+            }
+
             UpdateViews();
         }
 

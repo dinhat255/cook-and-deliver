@@ -10,7 +10,7 @@ namespace CookAndDeliver.Delivery
         public DeliverySettings settings = new DeliverySettings();
         [Range(.01f, .3f)] public float swipeWidthFraction = .06f;
         [Min(1f)] public float swipeHorizontalRatio = 1.25f;
-        public string[] sampleOrderNames = { "Cơm gà nóng", "Bánh mì giòn", "Trà sữa mát", "Mì xào rau", "Bánh ngọt" };
+        public string[] sampleOrderNames = { "Phở Bò Tái", "Bánh Mì Thịt Nướng", "Tteokbokki Cay", "K-Bánh Mì Bulgogi", "Tteokbokki Cung Đình" };
         [Min(1)] public int baseReward = 100;
 
         public DeliveryRunRequest CreateRequest(int seed)

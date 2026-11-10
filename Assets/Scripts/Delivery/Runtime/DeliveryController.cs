@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using CookAndDeliver.Delivery.Core;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace CookAndDeliver.Delivery
 
         // External hooks for gameplay loop bridges (e.g. Cooking)
         public static Func<DeliveryRunRequest> ExternalRequestProvider;
+        public static Func<IReadOnlyList<DeliveryOrder>> ExternalPreviewOrdersProvider;
         public static Action<DeliveryRunResult> OnExternalRunCompleted;
         public static Action OnExternalReturnRequested;
         public static Func<bool> ExternalIsTutorialCompleted;
@@ -33,6 +35,7 @@ namespace CookAndDeliver.Delivery
 
         private void Awake()
         {
+            EnsureSingleAudioListener();
             config.Validate();
             Application.targetFrameRate = 60;
             previousOrientation = Screen.orientation;
@@ -203,6 +206,32 @@ namespace CookAndDeliver.Delivery
             ui.ShowResult(result, Progress.Data, saved);
             Play(finishClip);
             OnExternalRunCompleted?.Invoke(result);
+        }
+
+        private void EnsureSingleAudioListener()
+        {
+            var listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
+            if (listeners.Length <= 1) return;
+
+            var localScene = gameObject.scene;
+            bool hasExternalListener = false;
+            for (int i = 0; i < listeners.Length; i++)
+            {
+                if (listeners[i] != null && listeners[i].enabled && listeners[i].gameObject.scene != localScene)
+                {
+                    hasExternalListener = true;
+                    break;
+                }
+            }
+
+            if (!hasExternalListener) return;
+            for (int i = 0; i < listeners.Length; i++)
+            {
+                if (listeners[i] != null && listeners[i].gameObject.scene == localScene)
+                {
+                    listeners[i].enabled = false;
+                }
+            }
         }
 
         private void Play(AudioClip clip) { if (clip != null) audioSource.PlayOneShot(clip); }

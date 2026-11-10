@@ -49,6 +49,7 @@ namespace CookAndDeliver.Cooking.Presenters
         bool isSessionReady;
         bool isPotHinting;
         bool isTrashModeActive;
+        bool isShiftEndingPending;
         TrayButtonView cachedTrashButtonView;
 
         public event Action OnSessionReady;
@@ -69,6 +70,7 @@ namespace CookAndDeliver.Cooking.Presenters
             SetupPotButton();
             SetupOverlay();
             SetupPresenterEvents();
+            SetupDeliveryBridge();
         }
 
         void OnEnable()
@@ -126,7 +128,10 @@ namespace CookAndDeliver.Cooking.Presenters
             economyEventChannel?.RaiseCoinsUpdated(CookingSession.Coins, 0);
             economyEventChannel?.RaiseComboUpdated(CookingSession.Combo);
             int goal = config != null ? config.shipGoal : 3;
-            economyEventChannel?.RaiseShipCountUpdated(CookingSession.CookedDeliveryOrders.Count, goal);
+            int initialShipDisplay = (CookingSession.HasDeliveryResult || CookingSession.DayDeliveryCompleted >= goal)
+                ? Mathf.Min(Mathf.Max(CookingSession.CookedDeliveryOrders.Count, CookingSession.DayDeliveryCompleted), goal)
+                : CookingSession.CookedDeliveryOrders.Count;
+            economyEventChannel?.RaiseShipCountUpdated(initialShipDisplay, goal);
 
             if (workstationPresenter != null && workstationPresenter.boards != null && workstationPresenter.boards.Length > 0)
             {
@@ -408,8 +413,9 @@ namespace CookAndDeliver.Cooking.Presenters
                     hudPresenter.hudView.coinsText.transform.DOPunchScale(Vector3.one * 0.3f, 0.25f, 6, 0.6f);
                 }
 
-                if (CookingSession.IsDayTargetMet && (daySummaryPopup == null || !daySummaryPopup.IsOpen))
+                if (CookingSession.IsDayTargetMet && !isShiftEndingPending && (daySummaryPopup == null || !daySummaryPopup.IsOpen))
                 {
+                    BeginDayEndSequence();
                     DOVirtual.DelayedCall(0.6f, () => ShowDaySummary()).SetLink(gameObject);
                 }
             });
@@ -833,6 +839,11 @@ namespace CookAndDeliver.Cooking.Presenters
                 return CookingSession.BuildDeliveryRunRequest();
             };
 
+            DeliveryController.ExternalPreviewOrdersProvider = () =>
+            {
+                return CookingSession.BuildDeliveryRunRequest().Orders;
+            };
+
             DeliveryController.OnExternalRunCompleted = (result) =>
             {
                 CookingSession.ApplyDeliveryResult(result);
@@ -849,6 +860,23 @@ namespace CookAndDeliver.Cooking.Presenters
             DeliveryController.ExternalOnTutorialCompleted = () => GameProgressStore.MarkDeliveryTutorialCompleted();
         }
 
+        void BeginDayEndSequence()
+        {
+            isGameFrozen = true;
+            isShiftEndingPending = true;
+            SetTrashMode(false);
+
+            if (shipOverlay != null) shipOverlay.Show(false);
+            if (orderPresenter != null && orderPresenter.queuePopup != null && orderPresenter.queuePopup.IsOpen)
+            {
+                orderPresenter.queuePopup.Close();
+            }
+
+            if (orderPresenter != null) orderPresenter.SetPaused(true);
+            if (heatStationPresenter != null) heatStationPresenter.SetPaused(true);
+            if (workstationPresenter != null) workstationPresenter.SetPaused(true);
+        }
+
         void HandleDeliveryReturn()
         {
             int earned = CookingSession.LastDeliveryEarned;
@@ -856,6 +884,12 @@ namespace CookAndDeliver.Cooking.Presenters
             int delivered = CookingSession.LastDeliveredCount;
             int total = CookingSession.LastDeliveryTotalOrders;
             bool lost = CookingSession.LastDeliveryCargoLost;
+            int goal = config != null ? config.shipGoal : 3;
+
+            if (CookingSession.IsDayTargetMet && !isShiftEndingPending)
+            {
+                BeginDayEndSequence();
+            }
 
             DOVirtual.DelayedCall(0.5f, () =>
             {
@@ -873,6 +907,11 @@ namespace CookAndDeliver.Cooking.Presenters
                 CookingSession.ClearDeliveryOrders();
                 DeliveryController.PendingOrderCount = 0;
 
+                if (CookingSession.DayDeliveryCompleted >= goal)
+                {
+                    economyEventChannel?.RaiseShipCountUpdated(goal, goal);
+                }
+
                 if (CookingSession.IsDayTargetMet && (daySummaryPopup == null || !daySummaryPopup.IsOpen))
                 {
                     DOVirtual.DelayedCall(1.2f, () => ShowDaySummary()).SetLink(gameObject);
@@ -882,16 +921,24 @@ namespace CookAndDeliver.Cooking.Presenters
 
         void ShowDaySummary()
         {
-            isGameFrozen = true;
-            if (orderPresenter != null) orderPresenter.SetPaused(true);
-            if (heatStationPresenter != null) heatStationPresenter.SetPaused(true);
-            if (workstationPresenter != null) workstationPresenter.SetPaused(true);
+            isShiftEndingPending = false;
+            BeginDayEndSequence();
+
+            if (orderPresenter != null) orderPresenter.ClearAllOrders();
+            if (heatStationPresenter != null) heatStationPresenter.ClearAllSlots();
+            if (workstationPresenter != null) workstationPresenter.ResetAllBoards();
+
+            UpdateMutualHighlights();
+            UpdatePotHint();
+
+            int deliveryGoal = config != null ? config.shipGoal : 3;
+            int displayShip = Mathf.Min(CookingSession.DayDeliveryCompleted, deliveryGoal);
+            economyEventChannel?.RaiseShipCountUpdated(displayShip, deliveryGoal);
 
             int day = CookingSession.CurrentDay;
             int dineInOrders = CookingSession.DayDineInCompleted;
             int dineInIncome = dineInOrders * 110;
             int deliveryOrders = CookingSession.LastDeliveredCount;
-            int deliveryGoal = config != null ? config.shipGoal : 3;
             int deliveryIncome = CookingSession.LastDeliveryEarned;
             int penalty = CookingSession.LastDeliveryPenalty;
             int netIncome = dineInIncome + deliveryIncome - penalty;
@@ -914,18 +961,35 @@ namespace CookAndDeliver.Cooking.Presenters
 
             CookingSession.AdvanceToNextDay();
             isGameFrozen = false;
+            isShiftEndingPending = false;
 
+            if (heatStationPresenter != null)
+            {
+                heatStationPresenter.SetPaused(false);
+                heatStationPresenter.ClearAllSlots();
+            }
+            if (workstationPresenter != null)
+            {
+                workstationPresenter.SetPaused(false);
+                workstationPresenter.ResetAllBoards();
+                workstationPresenter.ResetShipProgress();
+            }
             if (orderPresenter != null)
             {
                 orderPresenter.SetPaused(false);
                 orderPresenter.InitializeOrders();
             }
-            if (heatStationPresenter != null) heatStationPresenter.SetPaused(false);
-            if (workstationPresenter != null)
+            if (workstationPresenter != null && orderPresenter != null)
             {
-                workstationPresenter.SetPaused(false);
-                workstationPresenter.ResetShipProgress();
+                workstationPresenter.AssignOrdersToBoards(orderPresenter.ActiveOrders);
+                if (workstationPresenter.boards != null && workstationPresenter.boards.Length > 0)
+                {
+                    workstationPresenter.SetActiveBoard(workstationPresenter.boards[0]);
+                }
             }
+
+            UpdateMutualHighlights();
+            UpdatePotHint();
 
             int g = config != null ? config.shipGoal : 3;
             economyEventChannel?.RaiseShipCountUpdated(0, g);
@@ -942,6 +1006,7 @@ namespace CookAndDeliver.Cooking.Presenters
             DeliveryController.PendingOrderCount = 0;
 
             isGameFrozen = false;
+            isShiftEndingPending = false;
             SetTrashMode(false);
 
             if (shipOverlay != null) shipOverlay.Show(false);
