@@ -9,13 +9,15 @@ namespace CookAndDeliver.Cooking.Data
     {
         public IngredientSO ingredient;
         [Range(1, 5)] public int requiredAmount = 1;
+        public bool skipCooking = false;
 
         public IngredientRequirement() { }
 
-        public IngredientRequirement(IngredientSO ingredient, int requiredAmount)
+        public IngredientRequirement(IngredientSO ingredient, int requiredAmount, bool skipCooking = false)
         {
             this.ingredient = ingredient;
             this.requiredAmount = requiredAmount;
+            this.skipCooking = skipCooking;
         }
     }
 }

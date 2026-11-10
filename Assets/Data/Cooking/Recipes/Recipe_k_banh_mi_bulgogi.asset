@@ -16,19 +16,33 @@ MonoBehaviour:
   recipeName: "K-B\xE1nh M\xEC Bulgogi"
   region: Fusion
   basePrice: 140
-  dishDescription: "V\u1ECF b\xE1nh m\xEC gi\xF2n tan k\u1EB9p th\u1ECBt b\xF2 Bulgogi n\u01B0\u1EDBng x\u1ED1t t\u01B0\u01A1ng m\xE8 v\xE0 kim chi cay gi\xF2n."
-  culturalStory: "S\u1EF1 giao thoa tuy\u1EC7t v\u1EDDi gi\u1EEFa b\xE1nh m\xEC S\xE0i G\xF2n v\xE0 th\u1ECBt n\u01B0\u1EDBng Bulgogi Seoul, t\u1EA1o n\xEAn c\u01A1n s\u1ED1t \u1EA9m th\u1EF1c fusion \u0111\u01B0\u1EE3c th\u1EF1c kh\xE1ch tr\u1EBB v\xF4 c\xF9ng y\xEAu chu\u1ED9ng."
-  flavorProfile: "V\u1ECF gi\xF2n tan, th\u1ECBt b\xF2 ng\u1ECDt \u0111\u1EADm x\u1ED1t l\xEA t\u01B0\u01A1ng m\xE8, kim chi chua cay thanh gi\u1EA3m ng\u1EA5y"
-  chefTip: "Th\u1ECBt b\xF2 n\u01B0\u1EDBng ch\xEDn t\u1EDBi tr\xEAn v\u1EC9 than ph\u1EA3i g\u1EAFp ngay v\xE0o b\xE1nh \u0111\u1EC3 ph\u1EA7n m\u1EE1 th\u1ECBt ng\u1EA5m v\xE0o ru\u1ED9t b\xE1nh"
+  dishDescription: "V\u1ECF b\xE1nh m\xEC gi\xF2n k\u1EB9p th\u1ECBt b\xF2 Bulgogi
+    n\u01B0\u1EDBng \u01B0\u1EDBp v\u1ECB n\u01B0\u1EDBc t\u01B0\u01A1ng \u0111\u1EADm
+    \u0111\xE0, \u0103n k\xE8m kim chi c\u1EA3i th\u1EA3o chua gi\xF2n gi\u1EA3m
+    ng\u1EA5y."
+  culturalStory: "M\xF3n \u0103n k\u1EBFt h\u1EE3p gi\u1EEFa \u1ED5 b\xE1nh m\xEC
+    gi\xF2n ki\u1EC3u Vi\u1EC7t Nam v\xE0 nh\xE2n th\u1ECBt b\xF2 n\u01B0\u1EDBng
+    Bulgogi truy\u1EC1n th\u1ED1ng H\xE0n Qu\u1ED1c k\xE8m kim chi, mang l\u1EA1i
+    h\u01B0\u01A1ng v\u1ECB \xC1 \u0110\xF4ng quen thu\u1ED9c m\xE0 m\u1EDBi m\u1EBB."
+  flavorProfile: "V\u1ECF b\xE1nh gi\xF2n, th\u1ECBt b\xF2 n\u01B0\u1EDBng \u0111\u1EADm
+    v\u1ECB n\u01B0\u1EDBc t\u01B0\u01A1ng ng\u1ECDt m\u1EB7n h\xE0i h\xF2a, kim
+    chi chua thanh"
+  chefTip: "N\u01B0\u1EDBng th\u1ECBt b\xF2 ch\xEDn \u0111\u1EC1u tr\xEAn v\u1EC9
+    v\xE0 \xE9p gi\xF2n v\u1ECF b\xE1nh m\xEC trong l\xF2, k\u1EB9p c\xF9ng kim chi
+    v\xE0 r\u01B0\u1EDBi th\xEAm n\u01B0\u1EDBc t\u01B0\u01A1ng."
   isUnlockedByDefault: 0
   unlockCostCoins: 250
   finishedDishSprite: {fileID: -493552162381789809, guid: d3a55e7a9b26d9a4985a73ea0f348198, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 3d8558cc413d6be4393085762cc8298f, type: 2}
     requiredAmount: 3
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 6366e36123984f240a7c20f9ce38c444, type: 2}
     requiredAmount: 2
-  - ingredient: {fileID: 11400000, guid: d13683d27f1fb2346a7d7278311ec254, type: 2}
+    skipCooking: 0
+  - ingredient: {fileID: 11400000, guid: 6f477844716338f47bf08e43e3681492, type: 2}
     requiredAmount: 1
+    skipCooking: 0

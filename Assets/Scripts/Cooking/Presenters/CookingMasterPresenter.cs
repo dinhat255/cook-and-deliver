@@ -438,7 +438,8 @@ namespace CookAndDeliver.Cooking.Presenters
             cell.localScale = Vector3.one;
             cell.DOPunchScale(Vector3.one * 0.12f, 0.15f, 5, 0.5f);
 
-            switch (ing.route)
+            var route = ShouldRouteDirectly(ing) ? CookingRoute.Direct : ing.route;
+            switch (route)
             {
                 case CookingRoute.Direct:
                     HandleDirectIngredient(ing, buttonView);
@@ -455,10 +456,26 @@ namespace CookAndDeliver.Cooking.Presenters
             }
         }
 
+        bool ShouldRouteDirectly(IngredientSO ingredient)
+        {
+            if (ingredient == null) return false;
+            if (ingredient.route == CookingRoute.Direct) return true;
+            if (workstationPresenter == null) return false;
+
+            var targetBoard = workstationPresenter.GetTargetBoard(ingredient);
+            if (targetBoard != null && targetBoard.CurrentOrder != null && targetBoard.CurrentOrder.Recipe != null)
+            {
+                return !targetBoard.CurrentOrder.Recipe.RequiresCooking(ingredient);
+            }
+
+            return false;
+        }
+
         void HandleDirectIngredient(IngredientSO ingredient, TrayButtonView buttonView)
         {
             if (workstationPresenter == null) return;
             var targetBoard = workstationPresenter.GetTargetBoard(ingredient);
+            Color rawTint = ingredient.GetDisplayColor(false);
 
             if (targetBoard == null)
             {
@@ -468,7 +485,7 @@ namespace CookAndDeliver.Cooking.Presenters
 
                 if (fallback != null)
                 {
-                    FlyBounce(ingredient.rawSprite, Color.white, buttonView.iconImage.transform.position, fallback.CenterWorldPos);
+                    FlyBounce(ingredient.rawSprite, rawTint, buttonView.iconImage.transform.position, fallback.CenterWorldPos);
                     fallback.RectTransform.DOKill();
                     fallback.RectTransform.DOShakePosition(0.25f, 12f, 30);
                     ShowToast("Không cần món này", fallback.RectTransform.position, new Color(1f, 0.5f, 0.4f));
@@ -476,7 +493,7 @@ namespace CookAndDeliver.Cooking.Presenters
                 return;
             }
 
-            SendIngredientToBoard(targetBoard, ingredient, ingredient.rawSprite, Color.white, buttonView.iconImage.transform.position);
+            SendIngredientToBoard(targetBoard, ingredient, ingredient.rawSprite, rawTint, buttonView.iconImage.transform.position);
         }
 
         void HandleGrillIngredient(IngredientSO ingredient, TrayButtonView buttonView)
@@ -540,7 +557,7 @@ namespace CookAndDeliver.Cooking.Presenters
         {
             slot.IsReserved = true;
             float duration = config != null ? config.smartTapFlyDuration : 0.18f;
-            FlyArc(ingredient.rawSprite, Color.white, startPos, slot.IconWorldPos, duration, () =>
+            FlyArc(ingredient.rawSprite, ingredient.GetDisplayColor(false), startPos, slot.IconWorldPos, duration, () =>
             {
                 if (heatStationPresenter != null)
                 {
@@ -706,29 +723,38 @@ namespace CookAndDeliver.Cooking.Presenters
             var targetBoard = workstationPresenter.GetTargetBoard(broth);
             if (targetBoard == null)
             {
-                bool orderNeedsBroth = false;
+                RecipeSO brothRequiringRecipe = null;
                 if (workstationPresenter.boards != null)
                 {
                     foreach (var b in workstationPresenter.boards)
                     {
-                        if (b != null && b.CurrentOrder != null && b.CurrentOrder.Recipe != null)
+                        if (b == null || b.CurrentOrder == null || b.CurrentOrder.Recipe == null) continue;
+                        int required = b.CurrentOrder.Recipe.GetRequiredAmount(broth);
+                        if (required <= 0) continue;
+
+                        b.HaveCounts.TryGetValue(broth.id, out int haveBroth);
+                        b.PendingCounts.TryGetValue(broth.id, out int pendingBroth);
+                        if (haveBroth + pendingBroth < required)
                         {
-                            if (b.CurrentOrder.Recipe.GetRequiredAmount(broth) > 0)
-                            {
-                                orderNeedsBroth = true;
-                                break;
-                            }
+                            brothRequiringRecipe = b.CurrentOrder.Recipe;
+                            if (b == workstationPresenter.ActiveBoard) break;
                         }
                     }
                 }
 
-                string toastMsg = orderNeedsBroth ? "Cần bánh phở trước" : "Không cần nước lèo";
+                string toastMsg = "Không cần nước lèo";
+                if (brothRequiringRecipe != null)
+                {
+                    bool needsRamen = brothRequiringRecipe.requirements != null &&
+                        brothRequiringRecipe.requirements.Exists(r => r != null && r.ingredient != null && r.ingredient.id == "ramen");
+                    toastMsg = needsRamen ? "Cần mì sợi trước" : "Cần bánh phở trước";
+                }
                 ShowToast(toastMsg, potRect != null ? potRect.position : transform.position, new Color(1f, 0.5f, 0.4f));
                 return;
             }
 
             Vector3 startPos = potRect != null ? potRect.position : transform.position;
-            SendIngredientToBoard(targetBoard, broth, broth.rawSprite, Color.white, startPos);
+            SendIngredientToBoard(targetBoard, broth, broth.rawSprite, broth.GetDisplayColor(false), startPos);
         }
 
         void OnTrashClicked(TrayButtonView trashView)

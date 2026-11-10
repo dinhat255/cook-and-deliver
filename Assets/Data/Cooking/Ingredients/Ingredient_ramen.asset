@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c7227a3b9e87d944a1998589b59b605, type: 3}
+  m_Name: Ingredient_ramen
+  m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Data.IngredientSO
+  id: ramen
+  displayName: "M\xEC s\u1EE3i"
+  route: 3
+  rawSprite: {fileID: 2520254230834346843, guid: 892f7bfabede04c469c8f6a02326165c, type: 3}
+  cookedSprite: {fileID: 0}
+  rawTint: {r: 1, g: 0.78, b: 0.22, a: 1}
+  cookedTint: {r: 0.85, g: 0.45, b: 0.16, a: 1}
+  slotBackgroundColor: {r: 0.52, g: 0.39, b: 0.14, a: 1}
+  cookDuration: 2.5
+  warnDuration: 4.5
+  burnDuration: 6
+  canBurn: 1

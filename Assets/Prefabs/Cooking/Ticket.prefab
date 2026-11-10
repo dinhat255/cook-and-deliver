@@ -1647,6 +1647,8 @@ MonoBehaviour:
   - {fileID: 8668234219997120511}
   - {fileID: 6622382242213382}
   clickButton: {fileID: 3425477051680967898}
+  dineInSprite: {fileID: 8994681510210721273, guid: 82ef21acee766e34cb72956fb1c60360, type: 3}
+  deliverySprite: {fileID: -4534634967793127557, guid: 0d16bd0d4294b5947855c48a867a54d5, type: 3}
   dineInColor: {r: 0.97, g: 0.96, b: 0.9, a: 1}
   deliveryColor: {r: 1, g: 0.66, b: 0.28, a: 1}
   dineInTextColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
@@ -1822,7 +1824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.97, g: 0.96, b: 0.9, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2161,7 +2163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Ph\u1EDF Kim Chi Bulgogi"
+  m_text: "M\xEC Kim Chi Th\u1ECBt B\xF2"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

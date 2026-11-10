@@ -25,6 +25,7 @@ namespace CookAndDeliver.Cooking.UI
             if (iconImage != null)
             {
                 iconImage.sprite = ingredient.rawSprite;
+                iconImage.color = ingredient.GetDisplayColor(false);
                 iconImage.enabled = true;
             }
 

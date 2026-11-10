@@ -53,7 +53,8 @@ namespace CookAndDeliver.Cooking.UI
 
             if (iconImage != null)
             {
-                iconImage.color = currentCount > 0 ? Color.white : dimmedIconTint;
+                Color baseTint = BoundIngredient != null ? BoundIngredient.GetDisplayColor(false) : Color.white;
+                iconImage.color = currentCount > 0 ? baseTint : baseTint * dimmedIconTint;
             }
         }
     }

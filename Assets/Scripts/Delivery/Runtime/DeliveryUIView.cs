@@ -217,7 +217,7 @@ namespace CookAndDeliver.Delivery
                     }
                 }
 
-                // 3. Longest partial match by dish name (e.g., "Phở Kim Chi" before "Phở Bò Tái")
+                // 3. Longest partial match by dish name (e.g., "Mì Kim Chi" before "Mì Xào")
                 string lower = order.Name.ToLowerInvariant();
                 int bestNameLen = -1;
                 Sprite bestByName = null;

@@ -16,19 +16,32 @@ MonoBehaviour:
   recipeName: "M\xEC X\xE0o Kim Chi Th\u1ECBt Heo"
   region: "H\xE0n Qu\u1ED1c"
   basePrice: 125
-  dishDescription: "M\xEC x\xE0o cay n\u1ED3ng v\u1EDBi th\u1ECBt heo n\u01B0\u1EDBng than hoa, kim chi c\u1EA3i th\u1EA3o gi\xF2n s\u1EA7n s\u1EADt v\xE0 x\u1ED1t t\u01B0\u01A1ng \u0111\u1EADm v\u1ECB."
-  culturalStory: "M\xF3n \u0103n khuya ph\u1ED5 bi\u1EBFn b\u1EADc nh\u1EA5t c\u1EE7a gi\u1EDBi tr\u1EBB H\xE0n Qu\u1ED1c, th\u01B0\u1EDDng \u0111\u01B0\u1EE3c th\u01B0\u1EDFng th\u1EE9c t\u1EA1i c\xE1c qu\xE1n l\u1EC1 \u0111\u01B0\u1EDDng Pojangmacha trong nh\u1EEFng \u0111\xEAm tuy\u1EBFt r\u01A1i."
-  flavorProfile: "Chua cay s\u1EA3ng kho\xE1i, th\u1ECBt heo ng\u1ECDt b\xE9o, s\u1EE3i m\xEC dai ngon ng\u1EA5m x\u1ED1t"
-  chefTip: "N\u01B0\u1EDBng th\u1ECBt heo x\xE9m c\u1EA1nh tr\u01B0\u1EDBc khi tr\u1ED9n c\xF9ng m\xEC v\xE0 kim chi \u0111\u1EC3 b\u1EADt d\u1EADy m\xF9i kh\xF3i than hoa"
+  dishDescription: "\u0110\u0129a m\xEC x\xE0o s\u0103n s\u1EE3i v\xE0ng \u01B0\u01A1m
+    k\u1EBFt h\u1EE3p th\u1ECBt heo n\u01B0\u1EDBng th\u01A1m b\xE9o, kim chi c\u1EA3i
+    th\u1EA3o chua cay v\xE0 h\xE0nh l\xE1 r\u1EAFc m\u1EB7t."
+  culturalStory: "Kimchi Bokkeum-myeon l\xE0 m\xF3n m\xEC x\xE0o ph\u1ED5 bi\u1EBFn
+    trong b\u1EEFa \u0103n gia \u0111\xECnh v\xE0 qu\xE1n \u0103n b\xECnh d\xE2n
+    t\u1EA1i H\xE0n Qu\u1ED1c, t\u1EADn d\u1EE5ng v\u1ECB chua cay c\u1EE7a kim chi
+    x\xE0o s\u0103n c\xF9ng s\u1EE3i m\xEC v\xE0 th\u1ECBt heo."
+  flavorProfile: "S\u1EE3i m\xEC x\xE0o dai th\u01A1m, th\u1ECBt heo n\u01B0\u1EDBng
+    b\xE9o ng\u1EADy h\xF2a quy\u1EC7n kim chi chua cay v\xE0 h\xE0nh l\xE1 d\u1EADy
+    m\xF9i"
+  chefTip: "X\xE0o ch\xEDn s\u1EE3i m\xEC tr\xEAn ch\u1EA3o v\xE0 n\u01B0\u1EDBng
+    2 ph\u1EA7n th\u1ECBt heo tr\xEAn v\u1EC9, sau \u0111\xF3 x\u1EBFp c\xF9ng kim
+    chi v\xE0 h\xE0nh l\xE1 l\xEAn \u0111\u0129a."
   isUnlockedByDefault: 0
   unlockCostCoins: 220
   finishedDishSprite: {fileID: 8995211142543142478, guid: ca37d8ffc6b17784ba3c2f474a0fa05f, type: 3}
   requirements:
-  - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}
+  - ingredient: {fileID: 11400000, guid: b368f5fcb894b6d40aa4769c295ad23a, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: e73b72c1e2ec29f4eaa9c889f1994ab3, type: 2}
     requiredAmount: 2
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 6366e36123984f240a7c20f9ce38c444, type: 2}
     requiredAmount: 2
-  - ingredient: {fileID: 11400000, guid: 6f477844716338f47bf08e43e3681492, type: 2}
+    skipCooking: 0
+  - ingredient: {fileID: 11400000, guid: 6a069b3c96c647d429b57f19f91e9d6d, type: 2}
     requiredAmount: 1
+    skipCooking: 0

@@ -67,7 +67,7 @@ namespace CookAndDeliver.Cooking.UI
             {
                 iconImage.enabled = true;
                 iconImage.sprite = ingredient.rawSprite;
-                iconImage.color = Color.white;
+                iconImage.color = ingredient.GetDisplayColor(false);
                 iconImage.transform.localScale = Vector3.one;
                 iconImage.transform.DOKill();
                 iconImage.transform.DOPunchScale(Vector3.one * 0.25f, 0.2f, 6, 0.6f);
@@ -143,6 +143,7 @@ namespace CookAndDeliver.Cooking.UI
         {
             if (iconImage == null || progressBarFill == null) return;
 
+            Color rawTint = CurrentIngredient.GetDisplayColor(false);
             Color cookedTint = CurrentIngredient.GetDisplayColor(true);
             bool blink = Mathf.Sin(Time.time * 22f) > 0f;
 
@@ -150,7 +151,7 @@ namespace CookAndDeliver.Cooking.UI
             {
                 case HeatSlotState.Cooking:
                     iconImage.sprite = CurrentIngredient.rawSprite;
-                    iconImage.color = Color.Lerp(Color.white, cookedTint, timer / cookDuration);
+                    iconImage.color = Color.Lerp(rawTint, cookedTint, timer / cookDuration);
                     progressBarFill.fillAmount = timer / cookDuration;
                     progressBarFill.color = ProgressGreen;
                     break;

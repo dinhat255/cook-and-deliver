@@ -16,19 +16,34 @@ MonoBehaviour:
   recipeName: "Tteokbokki Cung \u0110\xECnh"
   region: "H\xE0n Qu\u1ED1c"
   basePrice: 135
-  dishDescription: "B\xE1nh g\u1EA1o d\u1EBBo th\u01A1m x\xE0o c\xF9ng th\u1ECBt b\xF2 n\u01B0\u1EDBng v\xE0 x\u1ED1t t\u01B0\u01A1ng \u0111\u1EADu thanh ng\u1ECDt, kh\xF4ng cay theo phong c\xE1ch ho\xE0ng gia."
-  culturalStory: "Gungjung Tteokbokki l\xE0 m\xF3n \u0103n cao qu\xF3i t\u1EEB th\u1EDDi tri\u1EC1u \u0111\u1EA1i Joseon, t\u1EEBng \u0111\u01B0\u1EE3c d\xE2ng l\xEAn c\xE1c b\u1EADc vua ch\xFAa. Kh\xE1c v\u1EDBi phi\xEAn b\u1EA3n \u0111\u01B0\u1EDDng ph\u1ED1 ng\xE0y nay, m\xF3n \u0103n n\xE0y ch\xFA tr\u1ECDng v\u1ECB thanh tao, k\u1EBFt h\u1EE3p gi\u1EEFa b\xE1nh g\u1EA1o v\xE0 th\u1ECBt b\xF2 x\u1ED1t t\u01B0\u01A1ng."
-  flavorProfile: "Ng\u1ECDt thanh t\u1EF1 nhi\xEAn, b\xE1nh g\u1EA1o d\u1EBBo b\xF9i, th\u1ECBt b\xF2 \u0111\u1EADm \u0111\xE0 x\u1ED1t t\u01B0\u01A1ng \u0111\u1EADu"
-  chefTip: "\u0110\u1EA3o th\u1ECBt b\xF2 v\xE0 b\xE1nh g\u1EA1o tr\xEAn ch\u1EA3o \u1EDF l\u1EEDa l\u1EDBn \u0111\u1EC3 x\u1ED1t t\u01B0\u01A1ng \xE1o \u0111\u1EC1u m\xE0u n\xE2u \xF3ng \u1EA3"
+  dishDescription: "B\xE1nh g\u1EA1o d\u1EBBo m\u1EC1m k\u1EBFt h\u1EE3p th\u1ECBt
+    b\xF2 n\u01B0\u1EDBng, n\u01B0\u1EDBc t\u01B0\u01A1ng \u0111\u1EADm v\u1ECB v\xE0
+    h\xE0nh l\xE1 thanh nh\u1EB9, kh\xF4ng cay theo phong c\xE1ch cung \u0111\xECnh."
+  culturalStory: "Gungjung Tteokbokki l\xE0 m\xF3n \u0103n truy\u1EC1n th\u1ED1ng
+    c\xF3 t\u1EEB th\u1EDDi tri\u1EC1u \u0111\u1EA1i Joseon \u1EDF H\xE0n Qu\u1ED1c.
+    Kh\xE1c v\u1EDBi phi\xEAn b\u1EA3n s\u1ED1t \u1EDBt \u0111\u1ECF \u0111\u01B0\u1EDDng
+    ph\u1ED1 sau n\xE0y, m\xF3n \u0103n cung \u0111\xECnh ch\xFA tr\u1ECDng v\u1ECB
+    m\u1EB7n ng\u1ECDt thanh tao t\u1EEB n\u01B0\u1EDBc t\u01B0\u01A1ng v\xE0 th\u1ECBt
+    b\xF2."
+  flavorProfile: "M\u1EB7n ng\u1ECDt thanh tao t\u1EEB n\u01B0\u1EDBc t\u01B0\u01A1ng,
+    b\xE1nh g\u1EA1o d\u1EBBo m\u1EC1m, th\u1ECBt b\xF2 \u0111\u1EADm \u0111\xE0
+    v\xE0 h\xE0nh l\xE1 th\u01A1m nh\u1EB9"
+  chefTip: "X\xE0o 3 ph\u1EA7n b\xE1nh g\u1EA1o tr\xEAn ch\u1EA3o, n\u01B0\u1EDBng
+    2 ph\u1EA7n th\u1ECBt b\xF2 tr\xEAn v\u1EC9 r\u1ED3i r\u01B0\u1EDBi n\u01B0\u1EDBc
+    t\u01B0\u01A1ng v\xE0 h\xE0nh l\xE1 tr\u1EF1c ti\u1EBFp l\xEAn th\u1EDBt."
   isUnlockedByDefault: 0
   unlockCostCoins: 200
   finishedDishSprite: {fileID: 4361548428137612893, guid: 7aac7ed389ac9a64a92a43980d423f74, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 6f685ce031a5c3b47be6ea4def502f45, type: 2}
     requiredAmount: 3
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 3d8558cc413d6be4393085762cc8298f, type: 2}
     requiredAmount: 2
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 6f477844716338f47bf08e43e3681492, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 6a069b3c96c647d429b57f19f91e9d6d, type: 2}
     requiredAmount: 1
+    skipCooking: 0

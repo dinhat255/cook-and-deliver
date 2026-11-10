@@ -52,7 +52,7 @@ MonoBehaviour:
     - ingredientId: pork
       requiredAmount: 3
   - stepId: banh_mi_collect_heat
-    instructionText: "\u0110\u1EE3i v\u1ECF b\xE1nh m\xEC v\xE0 3 xi\xEAn th\u1ECBt
+    instructionText: "\u0110\u1EE3i v\u1ECF b\xE1nh m\xEC v\xE0 3 ph\u1EA7n th\u1ECBt
       ch\xEDn v\xE0ng, r\u1ED3i ch\u1EA1m L\xF2 \xE9p v\xE0 V\u1EC9 n\u01B0\u1EDBng
       \u0111\u1EC3 gom l\xEAn Th\u1EDBt T\u1EA1i B\xE0n."
     targetAnchorIds:
@@ -77,7 +77,7 @@ MonoBehaviour:
       requiredAmount: 3
   - stepId: banh_mi_herb
     instructionText: "Th\xEAm nguy\xEAn li\u1EC7u t\u01B0\u01A1i tr\u1EF1c ti\u1EBFp:
-      ch\u1EA1m Rau th\u01A1m 2 l\u1EA7n \u0111\u1EC3 r\u1EAFc l\xEAn th\u1EDBt."
+      ch\u1EA1m D\u01B0a ng\xF2 2 l\u1EA7n \u0111\u1EC3 r\u1EAFc l\xEAn th\u1EDBt."
     targetAnchorIds:
     - tray.herb
     blockOutsideInputs: 1
@@ -93,11 +93,11 @@ MonoBehaviour:
     ingredientGoals:
     - ingredientId: herb
       requiredAmount: 2
-  - stepId: banh_mi_soy
-    instructionText: "Ch\u1EA1m N\u01B0\u1EDBc t\u01B0\u01A1ng 1 l\u1EA7n \u0111\u1EC3
-      ho\xE0n t\u1EA5t chi\u1EBFc B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng!"
+  - stepId: banh_mi_chili
+    instructionText: "Ch\u1EA1m S\u1ED1t cay 1 l\u1EA7n \u0111\u1EC3 ho\xE0n t\u1EA5t
+      chi\u1EBFc B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng!"
     targetAnchorIds:
-    - tray.soy
+    - tray.chili
     blockOutsideInputs: 1
     showSpotlight: 1
     showHandPointer: 1
@@ -109,7 +109,7 @@ MonoBehaviour:
     completionRule: 1
     targetBoardIndex: 0
     ingredientGoals:
-    - ingredientId: soy
+    - ingredientId: chili
       requiredAmount: 1
   - stepId: banh_mi_serve
     instructionText: "M\xF3n \u0111\xE3 \u0111\u1EE7! Ch\u1EA1m n\xFAt RA M\xD3N
@@ -130,7 +130,7 @@ MonoBehaviour:
   - stepId: pho_select_ship_lane
     instructionText: "V\xE9 cam b\xEAn ph\u1EA3i l\xE0 \u0111\u01A1n Giao Ship. Ch\u1EA1m
       Th\u1EDBt Giao Ship ho\u1EB7c V\xE9 cam \u0111\u1EC3 l\xE0m m\xF3n Ph\u1EDF
-      B\xF2 T\xE1i!"
+      B\xF2!"
     targetAnchorIds:
     - board.1.select
     - ticket.1
@@ -185,7 +185,7 @@ MonoBehaviour:
       requiredAmount: 1
   - stepId: pho_beef
     instructionText: "Ch\u1EA1m Th\u1ECBt b\xF2 2 l\u1EA7n \u0111\u1EC3 n\u01B0\u1EDBng
-      ch\xEDn t\xE1i tr\xEAn V\u1EC9 n\u01B0\u1EDBng!"
+      ch\xEDn v\u1EEBa tr\xEAn V\u1EC9 n\u01B0\u1EDBng!"
     targetAnchorIds:
     - tray.beef
     blockOutsideInputs: 1

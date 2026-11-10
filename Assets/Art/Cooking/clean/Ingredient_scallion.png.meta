@@ -5,15 +5,6 @@ TextureImporter:
   - first:
       213: 7561334847581813513
     second: Ingredient_scallion_0
-  - first:
-      213: -6786162324880922184
-    second: Ingredient_scallion_1
-  - first:
-      213: -1030201511330722925
-    second: Ingredient_scallion_2
-  - first:
-      213: 994259519147737488
-    second: Ingredient_scallion_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -169,72 +160,6 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Ingredient_scallion_1
-      rect:
-        serializedVersion: 2
-        x: 22
-        y: 6
-        width: 21
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8b96555f155b2d1a0800000000000000
-      internalID: -6786162324880922184
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ingredient_scallion_2
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 1
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 39bcf060f2df3b1f0800000000000000
-      internalID: -1030201511330722925
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ingredient_scallion_3
-      rect:
-        serializedVersion: 2
-        x: 74
-        y: 15
-        width: 19
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0910a5dc3c15ccd00800000000000000
-      internalID: 994259519147737488
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -250,9 +175,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Ingredient_scallion_0: 7561334847581813513
-      Ingredient_scallion_1: -6786162324880922184
-      Ingredient_scallion_2: -1030201511330722925
-      Ingredient_scallion_3: 994259519147737488
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

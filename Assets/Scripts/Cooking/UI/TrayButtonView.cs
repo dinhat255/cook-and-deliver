@@ -60,6 +60,12 @@ namespace CookAndDeliver.Cooking.UI
                     {
                         iconImage.sprite = boundIngredient.rawSprite;
                     }
+
+                    Color targetIconColor = boundIngredient.GetDisplayColor(false);
+                    if (iconImage.color != targetIconColor)
+                    {
+                        iconImage.color = targetIconColor;
+                    }
                 }
 
                 if (labelText != null && labelText.text != boundIngredient.displayName)
@@ -102,6 +108,7 @@ namespace CookAndDeliver.Cooking.UI
                 {
                     iconImage.enabled = true;
                     iconImage.sprite = ingredient.rawSprite;
+                    iconImage.color = ingredient.GetDisplayColor(false);
                 }
                 if (labelText != null) labelText.text = ingredient.displayName;
             }

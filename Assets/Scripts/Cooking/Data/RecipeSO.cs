@@ -43,6 +43,14 @@ namespace CookAndDeliver.Cooking.Data
             return GetRequiredAmount(ingredient) > 0;
         }
 
+        public bool RequiresCooking(IngredientSO ingredient)
+        {
+            if (ingredient == null || ingredient.route == CookingRoute.Direct) return false;
+            if (requirements == null) return true;
+            var req = requirements.Find(r => r != null && (r.ingredient == ingredient || (r.ingredient != null && r.ingredient.id == ingredient.id)));
+            return req == null || !req.skipCooking;
+        }
+
         public bool IsComplete(Dictionary<string, int> currentIngredients)
         {
             if (currentIngredients == null || requirements == null) return false;
@@ -69,11 +77,19 @@ namespace CookAndDeliver.Cooking.Data
             // Rejects if current + pending already satisfies requirement
             if (currentCount + pendingCount >= required) return false;
 
-            // Broth requires at least 1 noodle already in the bowl before ladling
+            // Broth requires its paired noodle base ("noodle" or "ramen") already in the bowl before ladling
             if (ingredient.id == "broth")
             {
+                bool requiresNoodle = requirements.Exists(r => r != null && r.ingredient != null && r.ingredient.id == "noodle");
+                bool requiresRamen = requirements.Exists(r => r != null && r.ingredient != null && r.ingredient.id == "ramen");
+
                 currentIngredients.TryGetValue("noodle", out int noodleCount);
-                if (noodleCount <= 0) return false;
+                currentIngredients.TryGetValue("ramen", out int ramenCount);
+
+                if (requiresNoodle && !requiresRamen && noodleCount <= 0) return false;
+                if (requiresRamen && !requiresNoodle && ramenCount <= 0) return false;
+                if (requiresNoodle && requiresRamen && noodleCount <= 0 && ramenCount <= 0) return false;
+                if (!requiresNoodle && !requiresRamen && noodleCount <= 0 && ramenCount <= 0) return false;
             }
 
             return true;

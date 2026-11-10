@@ -14,6 +14,7 @@ namespace CookAndDeliver.Cooking.Data
         [Header("Visuals")]
         public Sprite rawSprite;
         public Sprite cookedSprite;
+        public Color rawTint = Color.white;
         public Color cookedTint = Color.white;
         public Color slotBackgroundColor = new Color(0.24f, 0.2f, 0.18f);
 
@@ -32,7 +33,7 @@ namespace CookAndDeliver.Cooking.Data
         public Color GetDisplayColor(bool isCooked)
         {
             if (isCooked && cookedSprite == null) return cookedTint;
-            return Color.white;
+            return !isCooked ? rawTint : Color.white;
         }
     }
 }

@@ -107,9 +107,9 @@ namespace CookAndDeliver.Cooking.Data
 
             if (list.Count == 0)
             {
-                list.Add(new DeliveryOrder("ship_fb_01", "Phở Bò Tái", 120));
-                list.Add(new DeliveryOrder("ship_fb_02", "Bánh Mì Thịt Nướng", 100));
-                list.Add(new DeliveryOrder("ship_fb_03", "Tteokbokki Cay", 110));
+                list.Add(new DeliveryOrder("ship_fb_01", "Phở Bò", 120));
+                list.Add(new DeliveryOrder("ship_fb_02", "Bánh Mì Thịt Nướng", 110));
+                list.Add(new DeliveryOrder("ship_fb_03", "Tteokbokki Cay", 100));
             }
 
             return new DeliveryRunRequest(Environment.TickCount, list);

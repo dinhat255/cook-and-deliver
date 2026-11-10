@@ -3336,6 +3336,73 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 577770875}
   m_CullTransparentMesh: 1
+--- !u!21 &585162537
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LiberationSans SDF Material (Instance)
+  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 28684132378477856, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _CullMode: 0
+    - _FaceDilate: 0
+    - _GradientScale: 10
+    - _MaskSoftnessX: 0
+    - _MaskSoftnessY: 0
+    - _OutlineSoftness: 0
+    - _OutlineWidth: 0
+    - _PerspectiveFilter: 0.875
+    - _ScaleRatioA: 0.9
+    - _ScaleRatioB: 1
+    - _ScaleRatioC: 0.73125
+    - _ScaleX: 1
+    - _ScaleY: 1
+    - _ShaderFlags: 0
+    - _Sharpness: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _TextureHeight: 1024
+    - _TextureWidth: 1024
+    - _UnderlayDilate: 0
+    - _UnderlayOffsetX: 0
+    - _UnderlayOffsetY: 0
+    - _UnderlaySoftness: 0
+    - _VertexOffsetX: 0
+    - _VertexOffsetY: 0
+    - _WeightBold: 0.75
+    - _WeightNormal: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!1 &586699671
 GameObject:
   m_ObjectHideFlags: 0
@@ -6987,10 +7054,12 @@ MonoBehaviour:
   m_text: Giao ship
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
+  m_sharedMaterial: {fileID: 585162537}
+  m_fontSharedMaterials:
+  - {fileID: 585162537}
+  m_fontMaterial: {fileID: 585162537}
+  m_fontMaterials:
+  - {fileID: 585162537}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278522911
@@ -12055,7 +12124,7 @@ MonoBehaviour:
   - {fileID: 8995211142543142478, guid: ca37d8ffc6b17784ba3c2f474a0fa05f, type: 3}
   dishCatalog:
   - recipeId: pho_bo_tai
-    dishName: "Ph\u1EDF B\xF2 T\xE1i"
+    dishName: "Ph\u1EDF B\xF2"
     sprite: {fileID: 8975405604427312706, guid: 244a2eb897c45cf40856d8c7f6fd797a, type: 3}
   - recipeId: banh_mi_thit_nuong
     dishName: "B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng"
@@ -12067,13 +12136,13 @@ MonoBehaviour:
     dishName: "K-B\xE1nh M\xEC Bulgogi"
     sprite: {fileID: -493552162381789809, guid: d3a55e7a9b26d9a4985a73ea0f348198, type: 3}
   - recipeId: pho_kimchi_bulgogi
-    dishName: "Ph\u1EDF Kim Chi Bulgogi"
+    dishName: "M\xEC Kim Chi Th\u1ECBt B\xF2"
     sprite: {fileID: 3343308236281925287, guid: 2f85ea52d7b259848a04abec0466c9ce, type: 3}
   - recipeId: tteokbokki_cung_dinh
     dishName: "Tteokbokki Cung \u0110\xECnh"
     sprite: {fileID: 4361548428137612893, guid: 7aac7ed389ac9a64a92a43980d423f74, type: 3}
   - recipeId: banh_mi_thap_cam_giao_hoa
-    dishName: "B\xE1nh M\xEC Th\u1EADp C\u1EA9m Giao H\xF2a"
+    dishName: "B\xE1nh M\xEC Th\u1EADp C\u1EA9m"
     sprite: {fileID: -5786566757414667715, guid: 573ea2ca7e4a81f4687e93bf1855e8a9, type: 3}
   - recipeId: mi_xao_kimchi_thit_heo
     dishName: "M\xEC X\xE0o Kim Chi Th\u1ECBt Heo"

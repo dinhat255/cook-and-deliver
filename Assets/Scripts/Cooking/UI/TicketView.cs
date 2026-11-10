@@ -17,6 +17,10 @@ namespace CookAndDeliver.Cooking.UI
         public TicketSlotView[] requirementSlots;
         public Button clickButton;
 
+        [Header("Ticket Background Sprites")]
+        public Sprite dineInSprite;
+        public Sprite deliverySprite;
+
         [Header("Ticket Color Styling")]
         public Color dineInColor = new Color(0.97f, 0.96f, 0.92f);
         public Color deliveryColor = new Color(1f, 0.55f, 0.15f);
@@ -48,7 +52,18 @@ namespace CookAndDeliver.Cooking.UI
             bool isShip = order.IsShipOrder;
 
             if (background != null)
-                background.color = isShip ? deliveryColor : dineInColor;
+            {
+                Sprite targetSprite = isShip ? deliverySprite : dineInSprite;
+                if (targetSprite != null)
+                {
+                    background.sprite = targetSprite;
+                    background.color = Color.white;
+                }
+                else
+                {
+                    background.color = isShip ? deliveryColor : dineInColor;
+                }
+            }
 
             Color targetTextColor = isShip ? deliveryTextColor : dineInTextColor;
 

@@ -13,22 +13,37 @@ MonoBehaviour:
   m_Name: Recipe_pho_bo_tai
   m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Data.RecipeSO
   id: pho_bo_tai
-  recipeName: "Ph\u1EDF B\xF2 T\xE1i"
+  recipeName: "Ph\u1EDF B\xF2"
   region: "Vi\u1EC7t Nam"
   basePrice: 120
-  dishDescription: "M\xF3n \u0103n qu\u1ED1c h\u1ED3n qu\u1ED1c t\xFAy c\u1EE7a Vi\u1EC7t Nam v\u1EDBi b\xE1nh ph\u1EDF m\u1EC1m m\u01B0\u1EDBt, th\u1ECBt b\xF2 t\xE1i m\u1EC1m ng\u1ECDt v\xE0 n\u01B0\u1EDBc d\xF9ng thanh trong ninh t\u1EEB x\u01B0\u01A1ng t\u1EE7y."
-  culturalStory: "Ra \u0111\u1EDDi t\u1EA1i mi\u1EC1n B\u1EAFc Vi\u1EC7t Nam \u0111\u1EA7u th\u1EBF k\u1EF7 20, Ph\u1EDF l\xE0 s\u1EF1 giao thoa k\u1EF3 di\u1EC7u gi\u1EEFa k\u1EF9 ngh\u1EC7 h\u1EA7m x\u01B0\u01A1ng ph\u01B0\u01A1ng T\xE2y v\xE0 s\u1EE3i b\xE1nh g\u1EA1o truy\u1EC1n th\u1ED1ng \xC1 \u0110\xF4ng. N\u01B0\u1EDBc d\xF9ng ninh h\u01A1n 10 ti\u1EBFng c\xF9ng qu\u1EBF h\u1ED3i th\u1EA3o qu\u1EA3 t\u1EA1o n\xEAn h\u01B0\u01A1ng v\u1ECB say \u0111\u1EAFm l\xF2ng ng\u01B0\u1EDDi."
-  flavorProfile: "Thanh ng\u1ECDt t\u1EF1 nhi\xEAn t\u1EEB x\u01B0\u01A1ng b\xF2, n\u1ED3ng n\xE0n h\u1ED3i qu\u1EBF, h\xE0nh l\xE1 cay nh\u1EB9"
-  chefTip: "Th\u1ECBt b\xF2 ch\u1EC9 n\u01B0\u1EDBng v\u1EEBa t\u1EDBi gi\u1EEF \u0111\u1ED9 m\u1ECDng n\u01B0\u1EDBc, chan n\u01B0\u1EDBc l\xE8o n\xF3ng h\u1ED5i l\xE0m th\u1ECBt ch\xEDn t\xE1i"
+  dishDescription: "M\xF3n \u0103n truy\u1EC1n th\u1ED1ng n\u1ED5i ti\u1EBFng c\u1EE7a
+    Vi\u1EC7t Nam v\u1EDBi b\xE1nh ph\u1EDF m\u1EC1m m\u01B0\u1EDBt, th\u1ECBt b\xF2
+    m\u1EC1m ng\u1ECDt v\xE0 n\u01B0\u1EDBc d\xF9ng thanh trong ninh t\u1EEB x\u01B0\u01A1ng
+    b\xF2."
+  culturalStory: "Ra \u0111\u1EDDi t\u1EA1i mi\u1EC1n B\u1EAFc Vi\u1EC7t Nam \u0111\u1EA7u
+    th\u1EBF k\u1EF7 20, Ph\u1EDF n\u1ED5i b\u1EADt v\u1EDBi s\u1EE3i b\xE1nh ph\u1EDF
+    l\xE0m t\u1EEB g\u1EA1o k\u1EBFt h\u1EE3p n\u01B0\u1EDBc d\xF9ng x\u01B0\u01A1ng
+    h\u1EA7m c\xF9ng qu\u1EBF, h\u1ED3i v\xE0 th\u1EA3o qu\u1EA3 t\u1EA1o n\xEAn
+    h\u01B0\u01A1ng v\u1ECB \u0111\u1EB7c tr\u01B0ng."
+  flavorProfile: "N\u01B0\u1EDBc d\xF9ng thanh ng\u1ECDt t\u1EEB x\u01B0\u01A1ng
+    b\xF2, th\u01A1m m\xF9i h\u1ED3i qu\u1EBF, th\u1ECBt b\xF2 \u0111\u1EADm v\u1ECB
+    v\xE0 h\xE0nh l\xE1 thanh m\xE1t"
+  chefTip: "Cho b\xE1nh ph\u1EDF v\xE0o t\xF4 tr\u01B0\u1EDBc r\u1ED3i m\u1EDBi chan
+    n\u01B0\u1EDBc l\xE8o n\xF3ng; n\u01B0\u1EDBng th\u1ECBt b\xF2 ch\xEDn v\u1EEBa
+    tr\xEAn v\u1EC9 v\xE0 r\u1EAFc th\xEAm h\xE0nh l\xE1 t\u01B0\u01A1i."
   isUnlockedByDefault: 1
   unlockCostCoins: 0
   finishedDishSprite: {fileID: 8975405604427312706, guid: 244a2eb897c45cf40856d8c7f6fd797a, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 5beacb0625865dc4696366dbe87665a1, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 3d8558cc413d6be4393085762cc8298f, type: 2}
     requiredAmount: 2
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 630b5ac52d29cab4ab668947dd8f0c5e, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 6a069b3c96c647d429b57f19f91e9d6d, type: 2}
     requiredAmount: 2
+    skipCooking: 0

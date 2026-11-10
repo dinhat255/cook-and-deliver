@@ -13,7 +13,7 @@
   3. `BottomZone` (Bottom-Stretch, cao 400px): Chứa `ZoneTray` mat, `TrayLine`, `TrayButtonView` (Tray 6x2).
   4. `FlyLayer`: Nằm trong `GameFrame9x16` (0,0 đến 1,1) để tọa độ bay parabol `InverseTransformPoint` đồng nhất 1-1 với thớt và khay.
   5. `ShipFullOverlay`, `OrderQueuePopup`, `CulinaryCodexPopup`: Giữ ở cấp Canvas ngoài cùng để dimmer làm mờ toàn bộ màn hình khi mở modal.
-- Asset pixel art: 100% 11 IngredientSO và 8 RecipeSO sử dụng bộ sprite tinh chỉnh sạch viền tại `Assets/Art/Cooking/clean/`. Hạn chế asset: không vẽ sprite trạng thái trung gian.
+- Asset pixel art: 12 `IngredientSO` (gồm `Ingredient_ramen` dùng chung sprite `Ingredient_noodle_0` với `rawTint` vàng `{1, 0.78, 0.22, 1}`) và 8 `RecipeSO` sử dụng bộ sprite tinh chỉnh sạch viền tại `Assets/Art/Cooking/clean/` (đã vẽ lại `Recipe_mi_xao_kimchi_thit_heo.png`). Hạn chế asset: không vẽ sprite trạng thái trung gian.
 - Người dùng phụ trách phần Cooking. Phần Delivery do người khác làm (scene `Delivery`).
 
 ## Quyết định kiến trúc (phần Cooking)
@@ -30,7 +30,7 @@
      - `CookingServiceLocator`: Đăng ký và truy xuất service qua interface marker `IService`.
   5. UI / View Layer (`CookAndDeliver.Cooking.UI`): 100% TextMeshProUGUI. Gồm `HudView`, `TicketView`, `TicketSlotView`, `BoardView`, `ChecklistSlotView`, `HeatSlotView`, `TrayButtonView`, `ShipOverlayView`, `OrderQueuePopupView`, `TMPKit`.
   6. Presenters Layer (`CookAndDeliver.Cooking.Presenters`): MVP pattern gồm `HudPresenter`, `OrderPresenter`, `HeatStationPresenter`, `WorkstationPresenter`, `CookingMasterPresenter`.
-  7. Editor Layer (`CookAndDeliver.Cooking.Editor`): `CookingAssetDatabaseBuilder`, `CookingSceneBuilder`, `CookingSpriteImporter`.
+  7. Editor Layer (`CookAndDeliver.Cooking.Editor`): `TutorialSaveDebugEditor` (toàn bộ thao tác scene/prefab dùng `unityMCP`).
   8. SaveLoad Layer (`CookAndDeliver.SaveLoad.Core`, `CookAndDeliver.SaveLoad.Objects`):
      - `ISaveLoadHandler`, `JsonSaveLoadHandler`, `SaveLoadManager`, `SaveTree`, `EncryptUtil` (AES-256).
      - Đường dẫn lưu: `Application.persistentDataPath/SaveData/savedata.json`.
@@ -56,7 +56,11 @@
     - `Oven`: `IconBox` nằm gọn trong khoang kính trên vỉ sắt (Y: 0.44 - 0.78), thanh tiến trình nằm ở gờ dưới cửa lò.
     - `Pan`: `IconBox` nằm giữa lòng chảo sốt (X: 0.24 - 0.76, Y: 0.44 - 0.78), thanh tiến trình đặt trên thân bếp gas.
   - Phân bổ KDS và hàng chờ: `Ticket0` (0.02 - 0.44), `Ticket1` (0.46 - 0.88), `QueueBadgeButton` (0.90 - 0.98) đảm bảo lọt lòng chuẩn tỷ lệ và không đè lấn nhau.
-  - Nước lèo (Broth Station UX): Sử dụng sprite `pot.png` (chiếc nồi inox) làm icon cho `Ingredient_broth` để tương đồng 1-1 với Nồi Nước Lèo trên bếp. Nồi tự động nhịp to nhỏ (pulse hint) khi thớt đã có bánh phở và đang chờ nước lèo. Toast phân biệt rõ: "Cần bánh phở trước" khi thiếu phở và "Không cần nước lèo" khi đơn không yêu cầu.
+  - Nước lèo (Broth Station UX): Sử dụng sprite `pot.png` (chiếc nồi inox) làm icon cho `Ingredient_broth` để tương đồng 1-1 với Nồi Nước Lèo trên bếp. Nồi tự động nhịp to nhỏ (pulse hint) khi thớt đã có `noodle` hoặc `ramen` và đang chờ nước lèo. Toast phân biệt rõ: `"Cần bánh phở trước"` / `"Cần mì sợi trước"` theo loại sợi của công thức, và `"Không cần nước lèo"` khi đơn không yêu cầu.
+- Route linh hoạt theo công thức & nhuộm màu nguyên liệu sống:
+  - `IngredientSO.rawTint` (`GetDisplayColor(false)`) cho phép tái sử dụng sprite cho nguyên liệu biến thể (ví dụ `Ingredient_ramen` dùng chung `Ingredient_noodle_0` với sắc vàng riêng).
+  - `IngredientRequirement.skipCooking` + `RecipeSO.RequiresCooking` + `CookingMasterPresenter.ShouldRouteDirectly` cho phép `Ingredient_ramen` (`Pan`) đi thẳng vào tô trong món nước (`Mì Kim Chi Thịt Bò`, `skipCooking = true`) và qua chảo trong món xào (`Mì Xào Kim Chi Thịt Heo`, `skipCooking = false`).
+  - Khay nguyên liệu 6x2 (12 ô): 11 nguyên liệu ở các ô 0-10 (`Tray_ramen` tại cột 5 hàng dưới, anchor `tray.ramen`) và `Tray_Trash` thu gọn còn 1 cột ở ô 11 (cột 6 hàng dưới).
 - Menu Editor: `Cooking > Build or rebuild Cooking scene (Clean Architecture)` thực hiện một cú click để sinh dữ liệu và nối dây trong scene.
 - Chín/cháy bằng code: đổi màu sprite + thanh tiến trình + khói UI. Vỉ 3s/6s/8s, lò ép 2s (không cháy), chảo 2.5s/4.5s/6s.
 - Smart-tap: chạm 1 lần, sprite bay cung parabol 0.18s. Thớt Active ưu tiên, nếu không nhận thì thử thớt còn lại.
@@ -68,9 +72,11 @@
   - `RecipeSO` mở rộng: Lưu trữ mô tả (`dishDescription`), nguồn gốc lịch sử văn hóa (`culturalStory`), đặc trưng vị giác (`flavorProfile`), mẹo đầu bếp (`chefTip`), trạng thái mở khóa mặc định (`isUnlockedByDefault`) và học phí mở khóa (`unlockCostCoins`).
   - `OrderPresenter.SpawnOrder`: Rút ngẫu nhiên đơn hàng từ tập các món đã học (`RecipeDatabaseSO.GetRandomUnlockedRecipe`).
   - `CulinaryCodexPopupView`: Sổ tay ẩm thực và học viện nấu ăn, hiển thị chi tiết văn hóa ẩm thực Việt - Hàn - Fusion và cho phép trả phí học mở khóa công thức.
-  - Danh mục mở rộng lên 8 món: Phở Bò Tái, Bánh Mì Thịt Nướng, Tteokbokki Cay (mở mặc định); K-Bánh Mì Bulgogi, Phở Kim Chi Bulgogi, Tteokbokki Cung Đình, Bánh Mì Thập Cẩm Giao Hòa, Mì Xào Kim Chi Thịt Heo (mở qua học nấu ăn).
+  - Danh mục 8 món chuẩn hóa sát thực tế (đều 4 nguyên liệu vừa 4 ô UI Ticket/Board, không sáng tạo thêm món ảo):
+    - Mở mặc định (3 món): `Phở Bò` (`pho_bo_tai`), `Bánh Mì Thịt Nướng` (`banh_mi_thit_nuong`, dùng `chili`), `Tteokbokki Cay` (`tteokbokki_cay`).
+    - Mở qua học nấu ăn (5 món): `K-Bánh Mì Bulgogi` (`k_banh_mi_bulgogi`, dùng `soy`), `Mì Kim Chi Thịt Bò` (`pho_kimchi_bulgogi`, `ramen` `skipCooking = true`), `Tteokbokki Cung Đình` (`tteokbokki_cung_dinh`), `Bánh Mì Thập Cẩm` (`banh_mi_thap_cam_giao_hoa`, 4 nguyên liệu `[bread x1, pork x2, beef x1, herb x2]`), `Mì Xào Kim Chi Thịt Heo` (`mi_xao_kimchi_thit_heo`, `[ramen x1, pork x2, kimchi x2, scallion x1]`).
 
-- Hệ thống màu sắc khay nguyên liệu (Category-based Color Palette): Màu nền ô nguyên liệu được cấu hình Data-driven trực tiếp qua trường `slotBackgroundColor` trong `IngredientSO` theo nhóm dinh dưỡng/ẩm thực (Rau củ: xanh lá tươi `#2E7D32`, Bánh mì: vàng hổ phách `#C27D28`, Bánh phở/gạo: xám bạc khói `#4A5568`, Thịt heo: hồng tươi `#8C3B4A`, Thịt bò: đỏ nâu steak `#6B2D2B`, Sốt cay: đỏ ớt `#A83226`, Nước tương: nâu sô-cô-la `#3E2723`, Thùng rác: đỏ cờ `#C72929`), tự động đồng bộ cả trong Scene View (`OnValidate`) và Runtime (`Awake`).
+- Hệ thống màu sắc khay nguyên liệu (Category-based Color Palette): Màu nền ô nguyên liệu được cấu hình Data-driven trực tiếp qua trường `slotBackgroundColor` trong `IngredientSO` theo nhóm dinh dưỡng/ẩm thực (Rau củ: `#2E7D32`, Bánh mì: `#C27D28`, Bánh phở/gạo: `#4A5568`, Mì sợi: `#856324`, Thịt heo: `#8C3B4A`, Thịt bò: `#6B2D2B`, Sốt cay: `#A83226`, Nước tương: `#3E2723`, Thùng rác: `#C72929`), tự động đồng bộ cả trong Scene View (`OnValidate`) và Runtime (`Awake`).
 - Hệ thống cầu nối Cooking - Delivery và Gameplay loop theo ngày (Day-based Loop):
   - `CookingSession`: Lưu trữ bền vững xuyên scene danh sách món ship vừa nấu (`CookedDeliveryOrders`), bộ đệm kết quả giao hàng (`LastDeliveryEarned`, `LastDeliveryPenalty`, `LastDeliveryCargoLost`), và tiến trình ca kinh doanh (`CurrentDay`, `DayTargetDineIn`, `DayTargetDelivery`, `DayDineInCompleted`, `DayDeliveryCompleted`).
   - Cầu nối Assembly độc lập (Decoupled Bridge): `DeliveryController` mở các static hooks (`ExternalRequestProvider`, `OnExternalRunCompleted`, `OnExternalReturnRequested`, `ExternalReturnButtonLabel`, `PendingOrderCount`) giúp Cooking liên kết 2 chiều mà không tạo phụ thuộc vòng (circular reference) hay ép sửa asmdef của Delivery.
@@ -87,7 +93,7 @@
   - Hệ thống chuyển cảnh mượt (SceneLoader): `SceneLoader.unity` (Build Index 3) làm scene Additive trung gian. `LoadSceneHandler` hỗ trợ nạp scene qua cả build index lẫn tên scene (`ResolveBuildIndex`), loại bỏ lỗi index -1. `FadeableLoader` dùng UniTask và DOTween độc lập timescale (`SetUpdate(true)`), tự động bật `raycastTarget` ngăn chạm nút lúc chuyển cảnh, màu fader chuẩn tông ấm `#141211`. Toàn bộ chuyển scene giữa MainMenu, Cooking và Delivery đều qua `LoadSceneHandler.LoadSceneByName`.
 - Hệ thống Tutorial ngày 1 tách rời gameplay (Decoupled Day 1 Tutorial) và công cụ test Save/Load:
   - Lưu trữ thống nhất trong `GameProgressSLO` qua `GameProgressStore`: bổ sung `CurrentDay`, `IsCookingTutorialCompleted`, `IsDeliveryTutorialCompleted` (đồng bộ với `DeliveryProgressStore` ở Delivery qua static hooks trên `DeliveryController`).
-  - Phần Cooking (`CookAndDeliver.Cooking.Tutorial`): điều phối bằng `CookingTutorialDirector` + `Day1CookingTutorial.asset` (`TutorialSequenceSO`, 13 bước + 3 mẹo mềm ngày 1), dùng `TutorialAnchor` / `TutorialAnchorRegistry`, `TutorialSpotlightMask` và `CookingTutorialOverlayView` (`FloatingLayer` Sub-Canvas `sortingOrder = 50`). Với bước `BoardIngredientCount` nhắm nhiều bếp (`station.*`), `ResolveStepTargets` lọc động các slot còn nguyên liệu (`MatchesSlotTransform` kiểm tra cả child `"Hit"`) ưu tiên `Perfect`/`Warning` và `CookingMasterPresenter` luôn dọn qua `ClearHeatSlot`. `BoardDine` mang `isDeliveryBoard = false` (`RA MÓN`) tách biệt `BoardShip` (`ĐÓNG HỘP`), `OrderPresenter.UpdateViews` ẩn cả placeholder scene khi `order == null`.
+  - Phần Cooking (`CookAndDeliver.Cooking.Tutorial`): điều phối bằng `CookingTutorialDirector` + `Day1CookingTutorial.asset` (`TutorialSequenceSO`, 13 bước dẫn dắt `Bánh Mì Thịt Nướng` với `Sốt cay` và `Phở Bò` + 3 mẹo mềm ngày 1), dùng `TutorialAnchor` / `TutorialAnchorRegistry`, `TutorialSpotlightMask` và `CookingTutorialOverlayView` (`FloatingLayer` Sub-Canvas `sortingOrder = 50`). Với bước `BoardIngredientCount` nhắm nhiều bếp (`station.*`), `ResolveStepTargets` lọc động các slot còn nguyên liệu (`MatchesSlotTransform` kiểm tra cả child `"Hit"`) ưu tiên `Perfect`/`Warning` và `CookingMasterPresenter` luôn dọn qua `ClearHeatSlot`. `BoardDine` mang `isDeliveryBoard = false` (`RA MÓN`) tách biệt `BoardShip` (`ĐÓNG HỘP`), `OrderPresenter.UpdateViews` ẩn cả placeholder scene khi `order == null`.
   - Phần Delivery (`CookAndDeliver.Delivery.DeliveryTutorialController`): lắng nghe `DeliverySimulation` + `SwipeInput`, dùng seam `SetSimulationFrozen` hướng dẫn 2 bước né chướng ngại vật và đổi làn vào vạch vàng giao hàng.
   - Công cụ kiểm thử Editor (`TutorialSaveDebugEditor`): menu `Tools/Tutorial/Reset All Save Data (Test Tutorial)`, `Reset Tutorial Flags Only (Day 1)`, `Show Dev Skip Controls` (mặc định tắt, lưu `EditorPrefs` key `CookAndDeliver.Dev.ShowTutorialSkipControls`, ẩn hoàn toàn nút `Bỏ qua bước`, `Qua Ngày 2` và `Bỏ qua` Delivery khi tắt hoặc trong bản build), và `Open Save & Tutorial Debugger`.
 

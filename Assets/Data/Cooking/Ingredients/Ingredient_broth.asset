@@ -17,6 +17,7 @@ MonoBehaviour:
   route: 0
   rawSprite: {fileID: -8943794831613276068, guid: c371572f428594749abee7703eb30791, type: 3}
   cookedSprite: {fileID: 0}
+  rawTint: {r: 1, g: 1, b: 1, a: 1}
   cookedTint: {r: 1, g: 1, b: 1, a: 1}
   slotBackgroundColor: {r: 0.29, g: 0.333, b: 0.408, a: 1}
   cookDuration: 3

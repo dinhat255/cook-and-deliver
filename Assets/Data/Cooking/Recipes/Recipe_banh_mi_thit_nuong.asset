@@ -16,19 +16,33 @@ MonoBehaviour:
   recipeName: "B\xE1nh M\xEC Th\u1ECBt N\u01B0\u1EDBng"
   region: "Vi\u1EC7t Nam"
   basePrice: 110
-  dishDescription: "V\u1ECF b\xE1nh m\xEC gi\xF2n tan k\u1EB9p th\u1ECBt heo n\u01B0\u1EDBng s\u1EA3 th\u01A1m l\u1EEBng tr\xEAn than hoa, k\u1EBFt h\u1EE3p rau th\u01A1m thanh m\xE1t v\xE0 \u1EDBt t\u01B0\u01A1i cay n\u1ED3ng."
-  culturalStory: "Kh\u1EDFi ngu\u1ED3n t\u1EEB baguette Ph\xE1p, ng\u01B0\u1EDDi Vi\u1EC7t \u0111\xE3 s\xE1ng t\u1EA1o n\xEAn chi\u1EBFc b\xE1nh m\xEC v\u1ECF gi\xF2n ru\u1ED9t x\u1ED1p k\u1EB9p th\u1ECBt n\u01B0\u1EDBng \u0111\u1EB7c s\u1EAFc, tr\u1EDF th\xE0nh bi\u1EC3u t\u01B0\u1EE3ng \u1EA9m th\u1EF1c \u0111\u01B0\u1EDDng ph\u1ED1 h\xE0ng \u0111\u1EA7u th\u1EBF gi\u1EDBi."
-  flavorProfile: "V\u1ECF gi\xF2n r\u1EE5m, th\u1ECBt n\u01B0\u1EDBng \u0111\u1EADm v\u1ECB ng\u1ECDt t\u1EF1 nhi\xEAn, cay n\u1ED3ng t\u1EEB \u1EDBt \u0111\u1ECF"
-  chefTip: "\xC9p n\xF3ng v\u1ECF b\xE1nh m\xEC trong l\xF2 tr\u01B0\u1EDBc khi k\u1EB9p th\u1ECBt \u0111\u1EC3 b\xE1nh gi\u1EEF \u0111\u1ED9 gi\xF2n tan l\xE2u nh\u1EA5t"
+  dishDescription: "\u1ED4 b\xE1nh m\xEC v\u1ECF gi\xF2n k\u1EB9p th\u1ECBt heo n\u01B0\u1EDBng
+    s\u1EA3 th\u01A1m l\u1EEBng, \u0103n k\xE8m d\u01B0a leo ng\xF2 r\xED m\xE1t
+    gi\xF2n v\xE0 s\u1ED1t cay \u0111\u1EADm v\u1ECB."
+  culturalStory: "Kh\u1EDFi ngu\u1ED3n t\u1EEB b\xE1nh m\xEC baguette Ph\xE1p, ng\u01B0\u1EDDi
+    Vi\u1EC7t bi\u1EBFn t\u1EA5u th\xE0nh b\xE1nh m\xEC v\u1ECF gi\xF2n ru\u1ED9t
+    x\u1ED1p k\u1EB9p th\u1ECBt n\u01B0\u1EDBng, \u0111\u1ED3 chua v\xE0 rau m\xF9i,
+    tr\u1EDF th\xE0nh m\xF3n \u0103n \u0111\u01B0\u1EDDng ph\u1ED1 quen thu\u1ED9c
+    kh\u1EAFp c\u1EA3 n\u01B0\u1EDBc."
+  flavorProfile: "V\u1ECF b\xE1nh gi\xF2n r\u1EE5m, th\u1ECBt heo n\u01B0\u1EDBng
+    s\u1EA3 \u0111\u1EADm \u0111\xE0, d\u01B0a ng\xF2 thanh m\xE1t v\xE0 s\u1ED1t
+    cay k\xEDch th\xEDch v\u1ECB gi\xE1c"
+  chefTip: "\xC9p n\xF3ng v\u1ECF b\xE1nh m\xEC trong l\xF2 v\xE0 n\u01B0\u1EDBng
+    \u0111\u1EE7 3 ph\u1EA7n th\u1ECBt heo tr\xEAn v\u1EC9, sau \u0111\xF3 th\xEAm
+    d\u01B0a ng\xF2 v\xE0 s\u1ED1t cay l\xEAn th\u1EDBt."
   isUnlockedByDefault: 1
   unlockCostCoins: 0
   finishedDishSprite: {fileID: -3474516304383989357, guid: 8e6ba436319a046429f1e38d79d2f8d3, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}
     requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: e73b72c1e2ec29f4eaa9c889f1994ab3, type: 2}
     requiredAmount: 3
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 4ff7ad0427aa19c459860011db255bee, type: 2}
     requiredAmount: 2
-  - ingredient: {fileID: 11400000, guid: 6f477844716338f47bf08e43e3681492, type: 2}
+    skipCooking: 0
+  - ingredient: {fileID: 11400000, guid: d13683d27f1fb2346a7d7278311ec254, type: 2}
     requiredAmount: 1
+    skipCooking: 0

@@ -13,26 +13,35 @@ MonoBehaviour:
   m_Name: Recipe_banh_mi_thap_cam_giao_hoa
   m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Data.RecipeSO
   id: banh_mi_thap_cam_giao_hoa
-  recipeName: "B\xE1nh M\xEC Th\u1EADp C\u1EA9m Giao H\xF2a"
-  region: Fusion
+  recipeName: "B\xE1nh M\xEC Th\u1EADp C\u1EA9m"
+  region: "Vi\u1EC7t Nam"
   basePrice: 160
-  dishDescription: "Tuy\u1EC7t ph\u1EA9m \u0111\u1EB7c bi\u1EC7t c\u1EE7a qu\xE1n: K\u1EB9p c\u1EA3 th\u1ECBt b\xF2 n\u01B0\u1EDBng Bulgogi, th\u1ECBt heo n\u01B0\u1EDBng s\u1EA3, kim chi cay gi\xF2n v\xE0 rau th\u01A1m Vi\u1EC7t Nam."
-  culturalStory: "Bi\u1EC3u t\u01B0\u1EE3ng cao nh\u1EA5t c\u1EE7a B\u1EBFp Giao H\xF2a, n\u01A1i hai n\u1EC1n v\u0103n h\xF3a \u1EA9m th\u1EF1c n\u1ED3ng h\u1EADu b\u1EADc nh\u1EA5t ch\xE2u \xC1 h\xF2a quy\u1EC7n ho\xE0n h\u1EA3o trong m\u1ED9t \u1ED5 b\xE1nh m\xEC gi\xF2n tan."
-  flavorProfile: "T\u1EA7ng h\u01B0\u01A1ng phong ph\xFA: V\u1ECF gi\xF2n, th\u1ECBt \u0111\u1EADm \u0111\xE0, kim chi chua thanh c\xE2n b\u1EB1ng v\u1ECB cay \u1EDBt"
-  chefTip: "C\u1EA7n n\u01B0\u1EDBng ch\xEDn c\u1EA3 hai lo\u1EA1i th\u1ECBt tr\u01B0\u1EDBc khi l\u1EAFp r\xE1p \u0111\u1EC3 b\xE1nh kh\xF4ng b\u1ECB ngu\u1ED9i"
+  dishDescription: "\u1ED4 b\xE1nh m\xEC th\u1EADp c\u1EA9m \u0111\u1EA7y \u0111\u1EB7n
+    k\u1EB9p hai lo\u1EA1i th\u1ECBt heo n\u01B0\u1EDBng v\xE0 th\u1ECBt b\xF2 n\u01B0\u1EDBng,
+    \u0103n k\xE8m d\u01B0a leo ng\xF2 r\xED thanh m\xE1t."
+  culturalStory: "B\xE1nh m\xEC th\u1EADp c\u1EA9m l\xE0 bi\u1EBFn t\u1EA5u quen
+    thu\u1ED9c t\u1EA1i c\xE1c ti\u1EC7m b\xE1nh m\xEC Vi\u1EC7t Nam, k\u1EBFt h\u1EE3p
+    nhi\u1EC1u lo\u1EA1i nh\xE2n th\u1ECBt c\xF9ng rau d\u01B0a gi\xF2n m\xE1t trong
+    m\u1ED9t \u1ED5 b\xE1nh gi\xF2n r\u1EE5m cho b\u1EEFa \u0103n no \u0111\u1EE7."
+  flavorProfile: "V\u1ECF b\xE1nh m\xEC gi\xF2n tan, nh\xE2n th\u1ECBt heo v\xE0
+    th\u1ECBt b\xF2 \u0111\u1EADm \u0111\xE0 quy\u1EC7n c\xF9ng d\u01B0a ng\xF2 t\u01B0\u01A1i
+    m\xE1t"
+  chefTip: "N\u01B0\u1EDBng n\xF3ng v\u1ECF b\xE1nh trong l\xF2 \xE9p c\xF9ng 2 ph\u1EA7n
+    th\u1ECBt heo v\xE0 1 ph\u1EA7n th\u1ECBt b\xF2 tr\xEAn v\u1EC9, r\u1ED3i th\xEAm
+    d\u01B0a ng\xF2 \u0111\u1EC3 gi\u1EEF \u0111\u1ED9 gi\xF2n t\u01B0\u01A1i."
   isUnlockedByDefault: 0
   unlockCostCoins: 350
   finishedDishSprite: {fileID: -5786566757414667715, guid: 573ea2ca7e4a81f4687e93bf1855e8a9, type: 3}
   requirements:
   - ingredient: {fileID: 11400000, guid: 92e8d47d90edb82489ef3e7595b59846, type: 2}
     requiredAmount: 1
+    skipCooking: 0
+  - ingredient: {fileID: 11400000, guid: e73b72c1e2ec29f4eaa9c889f1994ab3, type: 2}
+    requiredAmount: 2
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 3d8558cc413d6be4393085762cc8298f, type: 2}
     requiredAmount: 1
-  - ingredient: {fileID: 11400000, guid: e73b72c1e2ec29f4eaa9c889f1994ab3, type: 2}
-    requiredAmount: 1
-  - ingredient: {fileID: 11400000, guid: 6366e36123984f240a7c20f9ce38c444, type: 2}
-    requiredAmount: 1
+    skipCooking: 0
   - ingredient: {fileID: 11400000, guid: 4ff7ad0427aa19c459860011db255bee, type: 2}
-    requiredAmount: 1
-  - ingredient: {fileID: 11400000, guid: d13683d27f1fb2346a7d7278311ec254, type: 2}
-    requiredAmount: 1
+    requiredAmount: 2
+    skipCooking: 0
