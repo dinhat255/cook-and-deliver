@@ -14,6 +14,16 @@ namespace CookAndDeliver.Delivery
         public DeliverySwipeInput input;
         public AudioSource audioSource;
         public AudioClip tapClip, hitClip, deliverClip, finishClip;
+        [Header("Delivery BGM & Vehicle Audio")]
+        public AudioSource bgmAudioSource;
+        public AudioSource vehicleAudioSource;
+        public AudioClip bgmClip;
+        public AudioClip vehicleMoveClip;
+        [Range(0f, 1f)] public float bgmVolume = 0.45f;
+        [Range(0f, 1f)] public float pausedBgmMultiplier = 0.45f;
+        [Range(0f, 1f)] public float vehicleVolume = 0.55f;
+        [Range(0.5f, 1.5f)] public float vehicleMinPitch = 0.88f;
+        [Range(0.5f, 1.5f)] public float vehicleMaxPitch = 1.04f;
         public DeliverySimulation Simulation { get; private set; }
         public DeliveryConfigSO Config => config;
         public DeliveryProgressStore Progress { get; private set; }
@@ -32,10 +42,14 @@ namespace CookAndDeliver.Delivery
 
         private float hudTime;
         private ScreenOrientation previousOrientation;
+        private bool isVehicleAudioPaused;
+        private bool hasStarted;
 
         private void Awake()
         {
             EnsureSingleAudioListener();
+            ConfigureLoopAudioSource(bgmAudioSource);
+            ConfigureLoopAudioSource(vehicleAudioSource);
             config.Validate();
             Application.targetFrameRate = 60;
             previousOrientation = Screen.orientation;
@@ -64,8 +78,23 @@ namespace CookAndDeliver.Delivery
 
         private void Start()
         {
+            hasStarted = true;
             world.Render(Simulation, 0);
             ui.Render(Simulation);
+            StartBgm();
+            SyncLoopAudio();
+        }
+
+        private void OnEnable()
+        {
+            if (!hasStarted || Simulation == null) return;
+            StartBgm();
+            SyncLoopAudio();
+        }
+
+        private void OnDisable()
+        {
+            StopLoopAudio();
         }
 
         public void StartDefaultRun(int? seed = null)
@@ -79,8 +108,10 @@ namespace CookAndDeliver.Delivery
             input.Cancel();
             world.ResetView();
             hudTime = 0;
+            StopVehicleAudio();
             Simulation.StartRun(request);
             ui.Render(Simulation);
+            SyncLoopAudio();
         }
 
         private void OnStartClicked()
@@ -130,6 +161,7 @@ namespace CookAndDeliver.Delivery
         {
             IsSimulationFrozen = frozen;
             input.Cancel();
+            SyncLoopAudio();
         }
 
         public void RequestLaneChange(int direction)
@@ -144,11 +176,13 @@ namespace CookAndDeliver.Delivery
         {
             IsSimulationFrozen = false;
             input.Cancel();
+            StopVehicleAudio();
             Simulation.AbortRun();
             world.ResetView();
             world.Render(Simulation, 0);
             ui.Render(Simulation);
             Play(tapClip);
+            SyncLoopAudio();
         }
 
         private void Update()
@@ -163,6 +197,7 @@ namespace CookAndDeliver.Delivery
             {
                 world.Render(Simulation, 0f, Simulation.InterpolationAlpha);
             }
+            SyncLoopAudio();
             hudTime -= dt;
             if (hudTime <= 0) { ui.Render(Simulation); hudTime = .1f; }
             if (Simulation.State == DeliveryState.Running) ui.Tick(dt);
@@ -176,6 +211,7 @@ namespace CookAndDeliver.Delivery
             ui.SetState(Simulation.State);
             if (Simulation.State == DeliveryState.Ready) ui.SetReady(config, Progress.Data);
             ui.Render(Simulation);
+            SyncLoopAudio();
         }
 
         private void Damaged(int integrity)
@@ -234,12 +270,126 @@ namespace CookAndDeliver.Delivery
             }
         }
 
-        private void Play(AudioClip clip) { if (clip != null) audioSource.PlayOneShot(clip); }
+        private static void ConfigureLoopAudioSource(AudioSource source)
+        {
+            if (source == null) return;
+            source.playOnAwake = false;
+            source.loop = true;
+            source.spatialBlend = 0f;
+        }
+
+        private void StartBgm()
+        {
+            if (bgmAudioSource == null || bgmClip == null) return;
+            if (bgmAudioSource.clip != bgmClip) bgmAudioSource.clip = bgmClip;
+            bgmAudioSource.loop = true;
+            bgmAudioSource.spatialBlend = 0f;
+            bgmAudioSource.volume = TargetBgmVolume();
+            if (!bgmAudioSource.isPlaying) bgmAudioSource.Play();
+        }
+
+        private float TargetBgmVolume()
+        {
+            if (Simulation != null && Simulation.State == DeliveryState.Paused)
+            {
+                return bgmVolume * pausedBgmMultiplier;
+            }
+            return bgmVolume;
+        }
+
+        private void SyncLoopAudio()
+        {
+            if (bgmAudioSource != null && bgmClip != null)
+            {
+                if (!bgmAudioSource.isPlaying && isActiveAndEnabled)
+                {
+                    StartBgm();
+                }
+                else
+                {
+                    bgmAudioSource.volume = TargetBgmVolume();
+                }
+            }
+
+            UpdateVehicleAudio();
+        }
+
+        private void UpdateVehicleAudio()
+        {
+            if (vehicleAudioSource == null || vehicleMoveClip == null || Simulation == null) return;
+
+            bool isMoving = Simulation.State == DeliveryState.Running && !IsSimulationFrozen;
+            if (isMoving)
+            {
+                if (vehicleAudioSource.clip != vehicleMoveClip)
+                {
+                    vehicleAudioSource.clip = vehicleMoveClip;
+                    vehicleAudioSource.loop = true;
+                    vehicleAudioSource.spatialBlend = 0f;
+                    isVehicleAudioPaused = false;
+                }
+
+                float baseSpeed = Mathf.Max(1f, Simulation.BaseSpeed);
+                float speedRatio = Mathf.Clamp01(Simulation.Speed / baseSpeed);
+                vehicleAudioSource.volume = vehicleVolume * Mathf.Lerp(0.72f, 1f, speedRatio);
+                vehicleAudioSource.pitch = Mathf.Lerp(vehicleMinPitch, vehicleMaxPitch, speedRatio);
+
+                if (!vehicleAudioSource.isPlaying)
+                {
+                    if (isVehicleAudioPaused)
+                    {
+                        vehicleAudioSource.UnPause();
+                        isVehicleAudioPaused = false;
+                    }
+                    else
+                    {
+                        vehicleAudioSource.Play();
+                    }
+                }
+                return;
+            }
+
+            if (Simulation.State == DeliveryState.Paused || (Simulation.State == DeliveryState.Running && IsSimulationFrozen))
+            {
+                if (vehicleAudioSource.isPlaying)
+                {
+                    vehicleAudioSource.Pause();
+                    isVehicleAudioPaused = true;
+                }
+                return;
+            }
+
+            StopVehicleAudio();
+        }
+
+        private void StopVehicleAudio()
+        {
+            isVehicleAudioPaused = false;
+            if (vehicleAudioSource != null && (vehicleAudioSource.isPlaying || vehicleAudioSource.time > 0f))
+            {
+                vehicleAudioSource.Stop();
+            }
+        }
+
+        private void StopLoopAudio()
+        {
+            StopVehicleAudio();
+            if (bgmAudioSource != null && bgmAudioSource.isPlaying)
+            {
+                bgmAudioSource.Stop();
+            }
+        }
+
+        private void Play(AudioClip clip)
+        {
+            if (audioSource != null && clip != null) audioSource.PlayOneShot(clip);
+        }
         private void OnApplicationPause(bool pause) { if (pause && Simulation != null) Pause(); }
         private void OnApplicationFocus(bool focus) { if (!focus && Simulation != null) Pause(); }
 
         private void OnDestroy()
         {
+            StopLoopAudio();
             if (Simulation == null) return;
             if (Application.isMobilePlatform) Screen.orientation = previousOrientation;
             Simulation.StateChanged -= StateChanged;
