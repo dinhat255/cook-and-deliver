@@ -219,7 +219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &41190815
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13320,7 +13320,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8497603796633403353, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 966826743}
   m_SourcePrefab: {fileID: 100100000, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
 --- !u!224 &966826740 stripped
 RectTransform:
@@ -13338,6 +13341,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635d2d9f2a207f44b848ebc38bf1fda2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.UI.TrayButtonView
+--- !u!1 &966826742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8497603796633403353, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
+  m_PrefabInstance: {fileID: 966826739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &966826743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966826742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760c052cf9bebb8408230acb203c8a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Tutorial.TutorialAnchor
+  anchorId: tray.chili
 --- !u!1 &989575491
 GameObject:
   m_ObjectHideFlags: 0
@@ -13623,7 +13644,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -22480,7 +22501,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8497603796633403353, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1866473110}
   m_SourcePrefab: {fileID: 100100000, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
 --- !u!224 &1866473107 stripped
 RectTransform:
@@ -22498,6 +22522,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635d2d9f2a207f44b848ebc38bf1fda2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.UI.TrayButtonView
+--- !u!1 &1866473109 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8497603796633403353, guid: eb4454aa5ae0eac479267a92248354a2, type: 3}
+  m_PrefabInstance: {fileID: 1866473106}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1866473110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866473109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760c052cf9bebb8408230acb203c8a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CookAndDeliver.Cooking.Tutorial.TutorialAnchor
+  anchorId: tray.kimchi
 --- !u!1 &1874503522
 GameObject:
   m_ObjectHideFlags: 0

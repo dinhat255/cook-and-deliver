@@ -187,13 +187,15 @@ namespace CookAndDeliver.Cooking.Tutorial
 
         public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
-            if (!_blockOutsideInputs) return false;
+            if (!_blockOutsideInputs || _allowedTargets.Count == 0) return false;
 
+            bool hasActiveTarget = false;
             for (int i = 0; i < _allowedTargets.Count; i++)
             {
                 RectTransform target = _allowedTargets[i];
                 if (target != null && target.gameObject.activeInHierarchy)
                 {
+                    hasActiveTarget = true;
                     if (RectTransformUtility.RectangleContainsScreenPoint(target, screenPoint, eventCamera))
                     {
                         return false;
@@ -201,7 +203,7 @@ namespace CookAndDeliver.Cooking.Tutorial
                 }
             }
 
-            return true;
+            return hasActiveTarget;
         }
     }
 }

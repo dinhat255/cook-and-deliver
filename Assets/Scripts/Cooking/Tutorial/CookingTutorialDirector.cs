@@ -578,9 +578,14 @@ namespace CookAndDeliver.Cooking.Tutorial
 
             for (int i = 0; i < anchorIds.Length; i++)
             {
-                if (TutorialAnchorRegistry.TryGet(anchorIds[i], out RectTransform rect))
+                string anchorId = anchorIds[i];
+                if (TutorialAnchorRegistry.TryGet(anchorId, out RectTransform rect))
                 {
                     output.Add(rect);
+                }
+                else if (!string.IsNullOrEmpty(anchorId))
+                {
+                    Debug.LogWarning($"[CookingTutorialDirector] Missing TutorialAnchor '{anchorId}' in active scene.");
                 }
             }
         }
